@@ -3,7 +3,7 @@ export default {
     basename: '', // only at build time to set, like /datta-able
     layout: 'vertical', // vertical, horizontal
     preLayout: '', // null, layout-2, layout-2-2, layout-3, layout-4, layout-4-2, layout-6, layout-8
-    collapseMenu: false, // mini-menu
+    collapseMenu: true, // mini-menu
     layoutType: 'menu-dark', // menu-dark, menu-light, dark
     navIconColor: false,
     headerBackColor: 'header-dark', // header-default, header-blue, header-red, header-purple, header-lightblue, header-dark

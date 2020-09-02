@@ -9,10 +9,21 @@ import empresaService from "src/App/services/Empresa/EmpresaService.js";
 import EmpresaFormInfGerais from './EmpresaFormInfGerais';
 import messageService from "src/App/services/MessageService.js";
 import cepService from "src/App/services/Cep/CepService.js";
+import { validarCNPJ } from "src/App/utils/validatorHelper";
 
 const validationSchema = yup.object({
-  razaoSocial: yup.string("Informe a razão social")
-  .required("Razão social é obrigatória")});
+  razaoSocial: yup.string().required("Razão social é obrigatória"),
+  cnpj: yup.string().required("Cnpj é obrigatório").test('Cnpj is Valid',
+  'Cnpj é invalido',
+  value=> validarCNPJ(value)
+),
+  email: yup.string().email("E-mail inválido"),
+  cep: yup.string().required("Cep é obrigatório"),
+  logradouro: yup.string().required("Endereço é obrigatório"),
+  numero: yup.string().required("Número é obrigatório"),
+  bairro: yup.string().required("Bairro é obrigatório"),
+  municipio: yup.object().required("Municipio é obrigatório"),
+});
 
 class EmpresaForm extends FormComponent {
 
@@ -54,6 +65,7 @@ class EmpresaForm extends FormComponent {
         empresa.bairro = data.bairro;
         empresa.municipio = data.municipio;
         empresa.codigoMunicipio = data.ibge;
+        empresa.cep = data.cep;
         this.setState({empresa})
       })
       .catch((error) => {
@@ -63,7 +75,6 @@ class EmpresaForm extends FormComponent {
       });
     }
   };
-  
   
   render() {
     if(this.state.empresa)

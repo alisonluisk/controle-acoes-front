@@ -36,7 +36,7 @@ class EmpresaView extends ViewComponent {
     const { resourceAtivos, resourceDesativados } = this.state;
     return (
       <React.Fragment>
-        <Breadcrumb/>
+        <Breadcrumb newResource={this.novo}/>
         <Row>
           <Col>
             <Tabs defaultActiveKey="ativos">

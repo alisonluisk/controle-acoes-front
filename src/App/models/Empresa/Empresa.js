@@ -14,6 +14,9 @@ export default class Empresa {
         this.telefone = obj['telefone'];
         this.email = obj['email'];
         this.dataAbertura = obj['dataAbertura'];
-        this.tipoEmpresa = obj['tipoEmpresa'];
+        this.tipoEmpresa = obj['tipoEmpresa'] || "HOLDING";
+        this.cotas_on = obj['cotas_on']
+        this.cotas_pn = obj['cotas_pn']
+        this.qtd_acoes = obj['qtd_acoes']
     }
 }

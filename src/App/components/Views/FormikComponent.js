@@ -2,7 +2,6 @@ import { Component } from "react";
 
 class FormikComponent extends Component {
     change = (name, e) => {
-      console.log(name)
       e.persist();
       this.props.handleChange(e);
       this.props.setFieldTouched(name, true, false);

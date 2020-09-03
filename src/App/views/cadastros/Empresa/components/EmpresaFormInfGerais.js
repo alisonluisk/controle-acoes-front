@@ -57,7 +57,7 @@ class EmpresaFormInfGerais extends FormikComponent {
   render() {
     const {
       values: {
-        id, cnpj, razaoSocial, tipoEmpresa, nomeFantasia, telefone, dataAbertura, email, cep,
+        cnpj, razaoSocial, tipoEmpresa, nomeFantasia, telefone, dataAbertura, email, cep,
         logradouro, numero, bairro, complemento, municipio
       },
       errors,

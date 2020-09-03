@@ -20,5 +20,6 @@ export default class Empresa {
         this.qtdAcoes = obj['qtdAcoes']
         this.matriz = obj['matriz']
         this.codigoMatriz = obj['codigoMatriz']
+        this.ativo = obj['ativo']
     }
 }

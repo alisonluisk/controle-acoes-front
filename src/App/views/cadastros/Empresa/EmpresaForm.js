@@ -6,23 +6,27 @@ import Empresa from 'src/App/models/Empresa/Empresa';
 import BreadcrumbForm from 'src/App/components/Views/BreadcrumbForm';
 import FormComponent from 'src/App/components/Views/FormComponent';
 import empresaService from "src/App/services/Empresa/EmpresaService.js";
-import EmpresaFormInfGerais from './EmpresaFormInfGerais';
-import messageService from "src/App/services/MessageService.js";
-import cepService from "src/App/services/Cep/CepService.js";
+import EmpresaFormInfGerais from './components/EmpresaFormInfGerais';
 import { validarCNPJ } from "src/App/utils/validatorHelper";
 
 const validationSchema = yup.object({
+  tipoEmpresa: yup.string().required('Tipo empresa é obrigatório'),
   razaoSocial: yup.string().required("Razão social é obrigatória"),
   cnpj: yup.string().required("Cnpj é obrigatório").test('Cnpj is Valid',
   'Cnpj é invalido',
   value=> validarCNPJ(value)
 ),
-  email: yup.string().email("E-mail inválido"),
+  email: yup.string().nullable().email("E-mail inválido"),
   cep: yup.string().required("Cep é obrigatório"),
   logradouro: yup.string().required("Endereço é obrigatório"),
   numero: yup.string().required("Número é obrigatório"),
   bairro: yup.string().required("Bairro é obrigatório"),
   municipio: yup.object().required("Municipio é obrigatório"),
+  dataAbertura: yup.object().nullable().test('Data inválida', 'Data é inválida', value=> value ? value.isValid() : true ),
+  codigoMatriz: yup.string().nullable().when('tipoEmpresa', {
+    is: 'FILIAL',
+    then: yup.string().required('Matriz é obrigatória'),
+  }),
 });
 
 class EmpresaForm extends FormComponent {
@@ -50,32 +54,16 @@ class EmpresaForm extends FormComponent {
     }
   }
 
-  salvar = async(produto) => {
-    await this.salvarModel(empresaService, produto);
+  salvar = async(empresa) => {
+    // Gambiarra pra reslver por enquanto
+    if(empresa.qtdAcoes){
+      empresa.qtdAcoes = empresa.qtdAcoes.toString().replaceAll(".","");
+    }
+
+    await this.salvarModel(empresaService, empresa);
     this.props.history.goBack();
   }
 
-  buscarCep = async(codigo) => {
-    if(codigo.length === 9){
-      cepService
-      .getByCodigo(codigo.replace('-', ''))
-      .then((data) => {
-        var empresa = {...this.state.empresa}
-        empresa.logradouro = data.logradouro;
-        empresa.bairro = data.bairro;
-        empresa.municipio = data.municipio;
-        empresa.codigoMunicipio = data.ibge;
-        empresa.cep = data.cep;
-        this.setState({empresa})
-      })
-      .catch((error) => {
-        if(error && error.data){
-          messageService.errorMessage(error.data.error, error.data.message);
-        }
-      });
-    }
-  };
-  
   render() {
     if(this.state.empresa)
       return (
@@ -100,7 +88,7 @@ class EmpresaForm extends FormComponent {
                 <Col>
                   <Tabs defaultActiveKey="inf-gerais">
                     <Tab eventKey="inf-gerais" title={`Informações gerais`}>
-                      <EmpresaFormInfGerais {...props} buscarCep={this.buscarCep}/>
+                      <EmpresaFormInfGerais {...props}/>
                     </Tab>
                   </Tabs>
                 </Col>

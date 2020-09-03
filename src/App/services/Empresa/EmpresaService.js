@@ -16,6 +16,11 @@ class EmpresaService extends BaseResourceService {
         return this.getAll(this.endpoint, params);
     }
 
+    getAllByParams = async (params) =>{
+        params.push({chave: 'ativo', valor: true});
+        return this.getAll(this.endpoint, params);
+    }
+
     salvar(empresa){
         return this.salvarModelo(this.endpoint, empresa);
     }

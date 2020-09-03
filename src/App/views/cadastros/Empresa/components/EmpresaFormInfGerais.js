@@ -1,49 +1,87 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 import TextField from "src/App/components/TextFields/TextField";
+import DateField from "src/App/components/TextFields/DateField";
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import FormikComponent from 'src/App/components/Views/FormikComponent';
-import { maskCnpj, maskTelefone, maskCep, maskIntegerValue } from "src/App/utils/formatterHelper";
+import { maskCnpj, maskTelefone, maskCep } from "src/App/utils/formatterHelper";
 import MenuItem from '@material-ui/core/MenuItem';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import messageService from "src/App/services/MessageService.js";
+
+import cepService from "src/App/services/Cep/CepService.js";
+import EmpresaFormMatriz from "./EmpresaFormMatriz";
+import empresaService from "src/App/services/Empresa/EmpresaService.js";
+import EmpresaFormAcoes from "./EmpresaFormAcoes";
 
 class EmpresaFormInfGerais extends FormikComponent {
 
   state = {
+    matrizes: []
   }
 
   componentDidMount() {
+    let params = [{ chave: 'tipoEmpresa', valor: 'MATRIZ' }];
+    empresaService.getAllByParams(params)
+      .then((data) => {
+        this.setState({ matrizes: data });
+      })
+      .catch((error) => {
+        this.setState({ matrizes: [] });
+        if (error && error.data) {
+          messageService.errorMessage(error.data.error, error.data.message);
+        }
+      });
   }
+
+  buscarCep = async (codigo) => {
+    if (codigo.length === 9) {
+      cepService
+        .getByCodigo(codigo.replace('-', ''))
+        .then((data) => {
+          this.props.setFieldValue("logradouro", data.logradouro, true);
+          this.props.setFieldValue("bairro", data.bairro, true);
+          this.props.setFieldValue("municipio", data.municipio, true);
+          this.props.setFieldValue("codigoMunicipio", data.ibge, true);
+          this.props.setFieldValue("cep", data.cep.replaceAll('-', ''), true);
+        })
+        .catch((error) => {
+          this.props.setFieldValue("cep", '', true);
+          if (error && error.data) {
+            messageService.errorMessage(error.data.error, error.data.message);
+          }
+        });
+    }
+  };
 
   render() {
     const {
       values: {
         id, cnpj, razaoSocial, tipoEmpresa, nomeFantasia, telefone, dataAbertura, email, cep,
-        logradouro, numero, bairro, complemento, municipio, qtd_acoes, cotas_on, cotas_pn
+        logradouro, numero, bairro, complemento, municipio
       },
       errors,
-      touched,
-      buscarCep
+      touched
     } = this.props;
-
-    const onBlurPercentualField = (name, e) => {
-      this.blur(name, e);
-      if (Number(e.target.value) > 100) {
-        this.props.setFieldValue(name, 100, true)
-      } else {
-        this.props.setFieldValue(name, Math.round(e.target.value), true)
+    
+    const handleChangeTipoEmpresa = (name, e) => {
+      switch (e.target.value) {
+        case "HOLDING": this.props.setFieldValue("qtdAcoes", '', true); break;
+        case "MATRIZ": this.props.setFieldValue("qtdAcoes", '5050000', true); break;
+        case "FILIAL": 
+          this.props.setFieldValue("qtdAcoes", '5050000', true); 
+          this.props.setFieldValue("cotasOn", '', true); 
+          this.props.setFieldValue("cotasPn", '', true); 
+        break;
+        default: break;
       }
+      this.change(name, e);
     }
 
     return (
       <React.Fragment>
         <Card.Body>
           <Box display="flex" flexDirection="row" width="100%" justifyContent="space-between" >
-            <Box display="flex" flexDirection="row" width="20%">
-              <TextField label="Código" disabled={true} value={id || ''} />
-            </Box>
-
             <Box display="flex" width="20%" flexDirection="row">
               <TextField
                 autoFocus
@@ -53,12 +91,7 @@ class EmpresaFormInfGerais extends FormikComponent {
                 helperText={touched.tipoEmpresa ? errors.tipoEmpresa : ""}
                 error={touched.tipoEmpresa && Boolean(errors.tipoEmpresa)}
                 value={tipoEmpresa || 'F'}
-                onChange={(e) => {
-                  if(e.target.value === "HOLDING"){
-                    this.props.setFieldValue("qtd_acoes", '', true);
-                  }
-                  this.props.setFieldValue("tipoEmpresa", e.target.value, true);
-                }}
+                onChange={(e) => handleChangeTipoEmpresa("tipoEmpresa", e)}
                 onBlur={this.blur.bind(null, "tipoEmpresa")}
                 label="Tipo empresa"
                 fullWidth
@@ -66,7 +99,6 @@ class EmpresaFormInfGerais extends FormikComponent {
                 <MenuItem selected value="HOLDING">
                   <em>HOLDING</em>
                 </MenuItem>
-
                 <MenuItem value="MATRIZ">
                   <em>MATRIZ</em>
                 </MenuItem>
@@ -80,7 +112,6 @@ class EmpresaFormInfGerais extends FormikComponent {
             <Box display="flex" flexDirection="row">
               <Box width="20%">
                 <TextField
-                  autoFocus
                   id="cnpj"
                   name="cnpj"
                   helperText={touched.cnpj ? errors.cnpj : ""}
@@ -95,7 +126,6 @@ class EmpresaFormInfGerais extends FormikComponent {
               </Box>
               <Box width="40%">
                 <TextField
-                  autoFocus
                   id="razaoSocial"
                   name="razaoSocial"
                   helperText={touched.razaoSocial ? errors.razaoSocial : ""}
@@ -109,7 +139,6 @@ class EmpresaFormInfGerais extends FormikComponent {
               </Box>
               <Box width="40%">
                 <TextField
-                  autoFocus
                   id="nomeFantasia"
                   name="nomeFantasia"
                   helperText={touched.nomeFantasia ? errors.nomeFantasia : ""}
@@ -153,13 +182,13 @@ class EmpresaFormInfGerais extends FormikComponent {
               <Box width="20%">
               </Box>
               <Box width="20%">
-                <TextField
+                <DateField
                   id="dataAbertura"
                   name="dataAbertura"
                   helperText={touched.dataAbertura ? errors.dataAbertura : ""}
                   error={touched.dataAbertura && Boolean(errors.dataAbertura)}
-                  value={dataAbertura || ''}
-                  onChange={this.change.bind(null, "dataAbertura")}
+                  value={dataAbertura || null}
+                  onChange={value => this.props.setFieldValue("dataAbertura", value)}
                   onBlur={this.blur.bind(null, "dataAbertura")}
                   label="Data de abertura"
                   fullWidth
@@ -179,7 +208,7 @@ class EmpresaFormInfGerais extends FormikComponent {
                 onChange={this.change.bind(null, "cep")}
                 onBlur={(e) => {
                   this.blur("cep", e);
-                  buscarCep(e.target.value);
+                  this.buscarCep(e.target.value);
                 }}
                 label="Cep"
                 inputProps={{ maxLength: 9 }}
@@ -243,65 +272,8 @@ class EmpresaFormInfGerais extends FormikComponent {
                 fullWidth
               />
             </Box>
-            <Typography variant="overline" display="block" gutterBottom>
-              Configuração para ações
-                </Typography>
-            <Box display="flex" flexDirection="row">
-              <Box display="flex" width="20%" flexDirection="row">
-                <TextField
-                  disabled={ tipoEmpresa === "HOLDING" }
-                  id="qtd_acoes"
-                  name="qtd_acoes"
-                  helperText={touched.qtd_acoes ? errors.qtd_acoes : ""}
-                  error={touched.qtd_acoes && Boolean(errors.qtd_acoes)}
-                  value={maskIntegerValue(qtd_acoes || '') || ''}
-                  onChange={this.change.bind(null, "qtd_acoes")}
-                  onBlur={this.blur.bind(null, "qtd_acoes")}
-                  label="Quantidade de ações"
-                  fullWidth
-                />
-              </Box>
-              <Box display="flex" width="20%" flexDirection="row">
-                <TextField
-                  id="cotas_on"
-                  name="cotas_on"
-                  type="number"
-                  helperText={touched.cotas_on ? errors.cotas_on : ""}
-                  error={touched.cotas_on && Boolean(errors.cotas_on)}
-                  value={cotas_on || ''}
-                  onChange={this.change.bind(null, "cotas_on")}
-                  onBlur={(e) => { onBlurPercentualField("cotas_on", e) }}
-                  label="Cotas ON"
-                  title="Percentual de cotas ON"
-                  InputProps={{
-                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                    min: "0",
-                    max: "100",
-                  }}
-                  fullWidth
-                />
-              </Box>
-              <Box display="flex" width="20%" flexDirection="row">
-                <TextField
-                  id="cotas_pn"
-                  name="cotas_pn"
-                  helperText={touched.cotas_pn ? errors.cotas_pn : ""}
-                  error={touched.cotas_pn && Boolean(errors.cotas_pn)}
-                  value={cotas_pn || ''}
-                  onChange={this.change.bind(null, "cotas_pn")}
-                  onBlur={(e) => { onBlurPercentualField("cotas_pn", e) }}
-                  label="Cotas PN"
-                  title="Percentual de cotas PN"
-                  fullWidth
-                  type="number"
-                  InputProps={{
-                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                    min: "0",
-                    max: "100",
-                  }}
-                />
-              </Box>
-            </Box>
+            {tipoEmpresa === "FILIAL" && (<EmpresaFormMatriz {...this.props} />)}
+            <EmpresaFormAcoes {...this.props} blur={this.blur} change={this.change} />
           </Box>
         </Card.Body>
       </React.Fragment>

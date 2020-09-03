@@ -101,8 +101,8 @@ export function maskCurrency(text) {
 export function maskIntegerValue(text) {
     if(!text)
         return '';
-    let valor = text.replace(/\D/g,"");
+    let valor = text.toString().replace(/\D/g,"");
     valor = valor.replace(/(\d{1,2}?)((\d{3})+)$/, "$1.$2");
     valor = valor.replace(/(\d{3})(?=\d)/g, "$1.");
-    return `${valor}`;
+    return valor;
 }

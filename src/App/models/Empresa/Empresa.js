@@ -15,8 +15,10 @@ export default class Empresa {
         this.email = obj['email'];
         this.dataAbertura = obj['dataAbertura'];
         this.tipoEmpresa = obj['tipoEmpresa'] || "HOLDING";
-        this.cotas_on = obj['cotas_on']
-        this.cotas_pn = obj['cotas_pn']
-        this.qtd_acoes = obj['qtd_acoes']
+        this.cotasOn = obj['cotasOn']
+        this.cotasPn = obj['cotasPn']
+        this.qtdAcoes = obj['qtdAcoes']
+        this.matriz = obj['matriz']
+        this.codigoMatriz = obj['codigoMatriz']
     }
 }

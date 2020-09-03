@@ -6,33 +6,6 @@ const EmpresaList = (props) => {
   
   const columns = [
     {
-      id: 'id',
-      label: 'Código',
-      width: '10%',
-      sort: true,
-      filter: true,
-      disablePadding: false,
-      align: 'left',
-    },
-    {
-      id: 'razaoSocial',
-      label: 'Razão Social',
-      width: '25%',
-      sort: true,
-      filter: true,
-      disablePadding: false,
-      align: 'left',
-    },
-    {
-      id: 'nomeFantasia',
-      label: 'Nome Fantasia',
-      width: '20%',
-      sort: true,
-      filter: true,
-      disablePadding: false,
-      align: 'left',
-    },
-    {
       id: 'cnpj',
       label: 'CNPJ',
       width: '15%',
@@ -42,6 +15,25 @@ const EmpresaList = (props) => {
       align: 'left',
       mask: maskCnpj
     },
+    {
+      id: 'razaoSocial',
+      label: 'Razão Social',
+      width: '45%',
+      sort: true,
+      filter: true,
+      disablePadding: false,
+      align: 'left',
+    },
+    {
+      id: 'tipoEmpresa',
+      label: 'Tipo',
+      width: '15%',
+      sort: true,
+      filter: true,
+      disablePadding: false,
+      align: 'left',
+    },
+
     {
       id: 'municipio.descricao',
       label: 'Municipio',

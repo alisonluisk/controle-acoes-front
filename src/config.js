@@ -3,7 +3,7 @@ export default {
     basename: '', // only at build time to set, like /datta-able
     layout: 'vertical', // vertical, horizontal
     preLayout: '', // null, layout-2, layout-2-2, layout-3, layout-4, layout-4-2, layout-6, layout-8
-    collapseMenu: true, // mini-menu
+    collapseMenu: false, // mini-menu
     layoutType: 'menu-dark', // menu-dark, menu-light, dark
     navIconColor: false,
     headerBackColor: 'header-dark', // header-default, header-blue, header-red, header-purple, header-lightblue, header-dark
@@ -16,8 +16,8 @@ export default {
     boxLayout: false,
     navDropdownIcon: 'style1', // style1, style2, style3
     navListIcon: 'style1', // style1, style2, style3, style4, style5, style6
-    navActiveListColor: 'active-dark', // active-default, active-blue, active-red, active-purple, active-lightblue, active-dark
-    navListTitleColor: 'title-dark', // title-default, title-blue, title-red, title-purple, title-lightblue, title-dark
+    navActiveListColor: 'active-default', // active-default, active-blue, active-red, active-purple, active-lightblue, active-dark
+    navListTitleColor: 'title-default', // title-default, title-blue, title-red, title-purple, title-lightblue, title-dark
     navListTitleHide: false,
     configBlock: false,
     layout6Background : 'linear-gradient(to right, #A445B2 0%, #D41872 52%, #FF0066 100%)', // used only for pre-layout = layout-6

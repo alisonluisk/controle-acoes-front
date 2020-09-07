@@ -29,6 +29,17 @@ class EmpresaService extends BaseResourceService {
         return this.findModelo(this.endpoint, id);
     }
 
+    buscarCnpj = async (cnpj) => {
+        return this.get(this.endpoint + `/${cnpj}/consultar`);
+    }
+
+    getParametroEmpresa = async (id) => {
+        return this.get(this.endpoint + `/${id}/parametro_empresa`);
+    }
+
+    salvarParametroEmpresa = async (id, data) => {
+        return this.update(this.endpoint + `/${id}/parametro_empresa`, data);
+    }
 }
 
 const sevice = new EmpresaService();

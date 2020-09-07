@@ -19,10 +19,12 @@ const validationSchema = yup.object({
   email: yup.string().nullable().email("E-mail inválido"),
   cep: yup.string().required("Cep é obrigatório"),
   logradouro: yup.string().required("Endereço é obrigatório"),
-  numero: yup.string().required("Número é obrigatório"),
+  numero: yup.number().typeError("Número é obrigatório").required("Número é obrigatório"),
   bairro: yup.string().required("Bairro é obrigatório"),
   municipio: yup.object().required("Municipio é obrigatório"),
-  dataAbertura: yup.object().nullable().test('Data inválida', 'Data é inválida', value=> value ? value.isValid() : true ),
+  dataAbertura: yup.object().nullable().test('Data inválida', 'Data é inválida', value=> 
+    value ? value.isValid() && !value.isAfter() : true 
+  ),
   codigoMatriz: yup.string().nullable().when('tipoEmpresa', {
     is: 'FILIAL',
     then: yup.string().required('Matriz é obrigatória'),
@@ -55,11 +57,6 @@ class EmpresaForm extends FormComponent {
   }
 
   salvar = async(empresa) => {
-    // Gambiarra pra reslver por enquanto
-    if(empresa.qtdAcoes){
-      empresa.qtdAcoes = empresa.qtdAcoes.toString().replaceAll(".","");
-    }
-
     await this.salvarModel(empresaService, empresa);
     this.props.history.goBack();
   }

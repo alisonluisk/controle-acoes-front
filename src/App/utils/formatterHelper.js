@@ -15,7 +15,7 @@ export function stringToDate(date) {
 export function maskCep(text){
     if(!text)
         return "";
-    text=text.replace(/D/g,"");                      //Remove tudo o que não é dígito
+    text=text.replace(/\D/g,"");                      //Remove tudo o que não é dígito
     text=text.replace(/^(\d{5})(\d)/,"$1-$2");       //Esse é tão fácil que não merece explicações
     return text;
 }
@@ -100,9 +100,13 @@ export function maskCurrency(text) {
 
 export function maskIntegerValue(text) {
     if(!text)
-        return '';
+        return undefined;
     let valor = text.toString().replace(/\D/g,"");
     valor = valor.replace(/(\d{1,2}?)((\d{3})+)$/, "$1.$2");
     valor = valor.replace(/(\d{3})(?=\d)/g, "$1.");
     return valor;
+}
+
+export function onlyNumbers(text){
+    return text.replace(/\D/g,"");
 }

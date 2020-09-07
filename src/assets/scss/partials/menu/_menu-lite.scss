@@ -556,6 +556,7 @@
     }
 
     &.on {
+        z-index: 15000;
         span {
             background-color: transparent;
 

@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import * as AuthActions from "src/store/actions/Auth/auth.actions";
-import messageService from "src/App/services/MessageService.js";
 
 import DEMO from "src/store/constant";
 import AvatarDefault from "src/assets/images/user/avatar-2.jpg";
@@ -15,54 +14,12 @@ class NavRight extends Component {
     this.props.logout();
   };
 
-  updateEmpresaLogada = (e, user, emp) => {
-    e.preventDefault();
-    this.props
-      .setEmpresaLogada(user, emp)
-      .then((e) => {
-        window.location.reload();
-      })
-      .catch((err) => {
-        messageService.errorMessage("Ocorreu um erro.", e.payload.data.message);
-      });
-  };
-
   render() {
     const usuarioLogado = this.props.usuarioLogado;
-    const empresaLogada = this.props.empresaLogada;
-    const empresas = usuarioLogado.empresasAcesso;
-    const menuItems = [];
-    if (empresas) {
-      for (let emp of empresas) {
-        menuItems.push(
-          <li key={emp.codigo}>
-            <Dropdown.Item
-              onClick={(e) => {
-                this.updateEmpresaLogada(e, usuarioLogado, emp);
-              }}
-              href={DEMO.BLANK_LINK}
-              className="dropdown-item"
-            >
-              {emp.razaoSocial}
-            </Dropdown.Item>
-          </li>
-        );
-      }
-    }
-
+    
     return (
       <React.Fragment>
         <ul className="navbar-nav ml-auto">
-          <li>
-            <Dropdown alignRight={!this.props.rtlLayout}>
-              <Dropdown.Toggle variant={"link"} id="dropdown-basic">
-                {empresaLogada ? empresaLogada.nomeFantasia : ""}
-              </Dropdown.Toggle>
-              <ul>
-                <Dropdown.Menu>{menuItems}</Dropdown.Menu>
-              </ul>
-            </Dropdown>
-          </li>
           <li>
             <Dropdown alignRight={!this.props.rtlLayout} className="drp-user">
               <Dropdown.Toggle variant={"link"} id="dropdown-basic">
@@ -98,14 +55,14 @@ class NavRight extends Component {
                     </a>
                   </li>
                   <li>
-                    <a
+                    {/* <a
                       href={DEMO.BLANK_LINK}
                       onClick={this.logout}
                       className="dropdown-item dud-logout"
                       title="Deslogar"
                     >
                       <i className="feather icon-log-out" /> Sair
-                    </a>
+                    </a> */}
                   </li>
                 </ul>
               </Dropdown.Menu>

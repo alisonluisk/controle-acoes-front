@@ -27,7 +27,7 @@ const EmpresaList = (props) => {
     {
       id: 'tipoEmpresa',
       label: 'Tipo',
-      width: '15%',
+      width: '10%',
       sort: true,
       filter: true,
       disablePadding: false,
@@ -46,7 +46,7 @@ const EmpresaList = (props) => {
     {
       id: 'acoes',
       label: 'Ações',
-      width: '15%',
+      width: '20%',
       sort: false,
       filter: false,
       disablePadding: false,

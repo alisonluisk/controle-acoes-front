@@ -7,6 +7,12 @@ class FormikComponent extends Component {
       this.props.setFieldTouched(name, true, false);
     };
 
+    changeNumber = (name, e) => {
+      e.persist();
+      this.props.setFieldValue(name, e.target.value.replace(/\D/g, ''), true);
+      this.props.setFieldTouched(name, true, false);
+    }
+
     blur = (name, e) => {
       this.props.setFieldTouched(name, true, true);
     };

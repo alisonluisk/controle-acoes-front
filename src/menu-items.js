@@ -20,6 +20,14 @@ export default {
                             classes: 'nav-item',
                             icon: 'feather icon-sidebar'
                         },
+                        {
+                            id: 'acoes',
+                            title: 'Ações',
+                            type: 'item',
+                            url: '/cadastros/acoes',
+                            classes: 'nav-item',
+                            icon: 'feather icon-sidebar'
+                        },
                     ]
                 },
             ]

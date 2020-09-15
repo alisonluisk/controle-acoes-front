@@ -44,7 +44,7 @@ class EmpresaFormInfGerais extends FormikComponent {
   }
 
   buscarCep = async (codigo) => {
-    if (codigo.length === 8) {
+    if (codigo && codigo.length === 8) {
       cepService
         .getByCodigo(onlyNumbers(codigo))
         .then((data) => {
@@ -317,7 +317,7 @@ class EmpresaFormInfGerais extends FormikComponent {
                   onChange={this.changeNumber.bind(null, "cep")}
                   onBlur={(e) => {
                     this.blur("cep", e);
-                    this.buscarCep(e.target.value);
+                    this.buscarCep(cep);
                   }}
                   label="Cep"
                   inputProps={{ maxLength: 9 }}

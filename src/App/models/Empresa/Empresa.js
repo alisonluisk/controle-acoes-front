@@ -15,11 +15,12 @@ export default class Empresa {
         this.email = obj['email'];
         this.dataAbertura = obj['dataAbertura'];
         this.tipoEmpresa = obj['tipoEmpresa'] || "HOLDING";
-        this.cotasOn = obj['cotasOn']
-        this.cotasPn = obj['cotasPn']
-        this.qtdAcoes = obj['qtdAcoes']
-        this.matriz = obj['matriz']
-        this.codigoMatriz = obj['codigoMatriz']
-        this.ativo = obj['ativo']
+        this.cotasOn = obj['cotasOn'];
+        this.cotasPn = obj['cotasPn'];
+        this.qtdAcoes = obj['qtdAcoes'];
+        this.matriz = obj['matriz'];
+        this.codigoMatriz = obj['codigoMatriz'];
+        this.ativo = obj['ativo'];
+        this.statusAcoes = obj['statusAcoes'];
     }
 }

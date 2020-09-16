@@ -110,3 +110,9 @@ export function maskIntegerValue(text) {
 export function onlyNumbers(text){
     return text.replace(/\D/g,"");
 }
+
+export function statusAcoesToDesc(status){
+    if(status === "EM_ANDAMENTO") return "Em andamento";
+    if(status === "AGUARDANDO") return "Aguardando";
+    if(status === "CONCLUIDO") return "Concluído";
+}

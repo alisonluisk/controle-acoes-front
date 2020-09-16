@@ -1,6 +1,6 @@
 import React from "react";
 import CustomTable from "src/App/components/Tables/CustomTable.js";
-import { maskCnpj, maskIntegerValue } from "src/App/utils/formatterHelper";
+import { maskCnpj, maskIntegerValue, statusAcoesToDesc } from "src/App/utils/formatterHelper";
 
 const AcoesList = (props) => {
   
@@ -43,9 +43,19 @@ const AcoesList = (props) => {
       align: 'left',
     },
     {
+      id: 'statusAcoes',
+      label: 'Status',
+      width: '10%',
+      sort: true,
+      filter: true,
+      disablePadding: false,
+      align: 'left',
+      mask: statusAcoesToDesc
+    },
+    {
       id: 'qtdAcoes',
       label: 'Ações',
-      width: '10%',
+      width: '5%',
       sort: true,
       filter: true,
       disablePadding: false,
@@ -55,7 +65,7 @@ const AcoesList = (props) => {
     {
       id: 'acoes',
       label: '',
-      width: '10%',
+      width: '5%',
       sort: false,
       filter: false,
       disablePadding: false,

@@ -21,20 +21,25 @@ class AcoesView extends Component {
     }
   };
 
-  componentDidMount() {
+  buscarEmpresasAcoes = () =>{
     empresaService
-      .getAllEmpresasAcoes()
-      .then((data) => {
-        console.log(data)
-        this.setState({ empresas: data });
-      })
-      .catch((error) => {
-        this.setState({ empresas: [] });
-        if (error && error.data) {
-          messageService.errorMessage(error.data.error, error.data.message);
-        }
-      });
+    .getAllEmpresasAcoes()
+    .then((data) => {
+      this.setState({ empresas: data });
+    })
+    .catch((error) => {
+      this.setState({ empresas: [] });
+      if (error && error.data) {
+        messageService.errorMessage(error.data.error, error.data.message);
+      }
+    });
   }
+
+  componentDidMount() {
+    this.buscarEmpresasAcoes();
+  }
+
+  
 
   gerarAcoes = (empresa) => {
     var acoes = {...this.state.acoes}
@@ -48,7 +53,9 @@ class AcoesView extends Component {
       .gerarAcoes(empresa)
       .then((data) => {
         console.log(data)
-        // this.setState({ empresas: data });
+        empresa.statusAcoes = data.data.status;
+        console.log(empresa);
+
       })
       .catch((error) => {
         this.setState({ empresas: [] });
@@ -56,7 +63,6 @@ class AcoesView extends Component {
           messageService.errorMessage(error.data.error, error.data.message);
         }
       });
-    console.log(empresa)
   }
 
   openCloseModal = (value) => {

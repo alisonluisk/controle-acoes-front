@@ -87,7 +87,6 @@ class EmpresaView extends ViewComponent {
 
   render() {
     const { resourceAtivos, resourceDesativados, showModal, parametroEmpresa, empresa } = this.state;
-    console.log(resourceAtivos)
     return (
       <React.Fragment>
         <Breadcrumb newResource={this.novo}/>

@@ -5,10 +5,12 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import { maskIntegerValue, maskCurrency, numberToCurrency } from "src/App/utils/formatterHelper";
+import AcoesEmpresa from "./AcoesEmpresa";
+import messageService from "src/App/services/MessageService.js";
 
 const AcoesForm = (props) => {
   const {
-    values: { empresa, cotasOn, cotasPn, qtdLotes, valorAcao },
+    values: { empresa, cotasOn, cotasPn, qtdLotes, valorAcao, parametroAcoes },
     errors,
     touched,
     handleSubmit,
@@ -28,6 +30,25 @@ const AcoesForm = (props) => {
   const blur = (name, e) => {
     setFieldTouched(name, true, true);
   };
+
+  const adicionarEmpresa = (parametro) =>{
+    parametroAcoes.push(parametro);
+    setFieldValue("parametroAcoes", parametroAcoes);
+  }
+
+  const removerEmpresa = (parametro) =>{
+    parametroAcoes.splice(parametroAcoes.indexOf(parametro), 1);
+    setFieldValue("parametroAcoes", parametroAcoes);
+  }
+
+  const salvar = () => {
+    if(parametroAcoes.reduce((total, param) => total + param.cotasOn, 0) != 100 ||
+        parametroAcoes.reduce((total, param) => total + param.cotasPn, 0) != 100){
+      messageService.errorMessage("Erro", "Percentual ON e PN deve ser igual a 100%")
+      return;
+    }
+    handleSubmit();
+  }
 
   return (
     <React.Fragment>
@@ -137,6 +158,7 @@ const AcoesForm = (props) => {
                 />
               </Grid>
             </Grid>
+            <AcoesEmpresa parametroAcoes={parametroAcoes} setFieldValue={setFieldValue} adicionarEmpresa={adicionarEmpresa} removerEmpresa={removerEmpresa}/>
           </Box> 
         </form>
       </Card.Body>
@@ -144,7 +166,7 @@ const AcoesForm = (props) => {
         <button
           disabled={!isValid || isSubmitting}
           type="submit"
-          onClick={handleSubmit}
+          onClick={salvar}
           className="btn btn-theme2 md-close"
         >
           Gerar ações

@@ -52,7 +52,7 @@ class EmpresaFormMatriz extends Component {
         <Grid container spacing={1}>
           <Grid item xs={12} sm={12} md={8} lg={6}>
             <Autocomplete
-              id="marca-autocomplete"
+              id="matriz-autocomplete"
               options={this.state.matrizes}
               getOptionLabel={(option) => `${option.razaoSocial}`}
               defaultValue={matriz}

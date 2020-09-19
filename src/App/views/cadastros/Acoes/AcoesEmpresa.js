@@ -92,9 +92,9 @@ class AcoesEmpresa extends Component {
             <Autocomplete
               id="empresa-autocomplete"
               options={parametroEmpresas}
-              getOptionLabel={(option) => `${option ? option.empresa.razaoSocial : ''}`}
-              value={parametro || ''}
-              getOptionSelected={(option, value) => option.id === value.id}
+              getOptionLabel={(option) => `${option ? option.empresa.razaoSocial : ""}`}
+              value={parametro || ""}
+              getOptionSelected={(option, value) => option.id === (value?.id || "") }
               onChange={(e, value) => {
                 selectEmpresa(value, e);
               }}

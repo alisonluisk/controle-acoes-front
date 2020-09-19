@@ -42,8 +42,8 @@ const AcoesForm = (props) => {
   }
 
   const salvar = () => {
-    if(parametroAcoes.reduce((total, param) => total + param.cotasOn, 0) != 100 ||
-        parametroAcoes.reduce((total, param) => total + param.cotasPn, 0) != 100){
+    if(parametroAcoes.reduce((total, param) => total + param.cotasOn, 0) !== 100 ||
+        parametroAcoes.reduce((total, param) => total + param.cotasPn, 0) !== 100){
       messageService.errorMessage("Erro", "Percentual ON e PN deve ser igual a 100%")
       return;
     }

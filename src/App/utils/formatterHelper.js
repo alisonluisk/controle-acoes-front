@@ -44,11 +44,19 @@ export function maskCnpj(text){
     return text;
 }
 
+export function maskCpfCnpj(text){
+    if(!text)
+        return "";
+    if(text.length <= 11)
+        return maskCpf(text);
+    return maskCnpj(text);
+}
+
 export function maskTelefone(text){
     if(!text)
         return "";
 
-    if(text.length > 14)
+    if(text.length > 10)
         return maskCelular(text);
 
     text=text.replace(/\D/g,"");                      //Remove tudo o que não é dígito
@@ -62,7 +70,7 @@ export function maskCelular(text){
         return "";
     text=text.replace(/\D/g,"");                      //Remove tudo o que não é dígito
     text=text.replace(/^(\d\d)(\d)/g,"($1) $2");      //Coloca parênteses em volta dos dois primeiros dígitos
-    text=text.replace(/(\d{5})(\d)/,"$1-$2");         //Coloca hífen entre o quarto e o quinto dígitos
+    text=text.replace(/(\d{5})(\d)/,"$1-$2");         //Coloca hífen entre o quint e o sexto dígitos
     return text;
 }
 

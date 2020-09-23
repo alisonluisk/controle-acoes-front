@@ -28,6 +28,30 @@ export default {
                             classes: 'nav-item',
                             icon: 'feather icon-sidebar'
                         },
+                        {
+                            id: 'colaboradores',
+                            title: 'Colaboradores',
+                            type: 'item',
+                            url: '/cadastros/colaboradores',
+                            classes: 'nav-item',
+                            icon: 'feather icon-sidebar'
+                        },
+                        {
+                            id: 'acionistas',
+                            title: 'Acionistas',
+                            type: 'item',
+                            url: '/cadastros/acionistas',
+                            classes: 'nav-item',
+                            icon: 'feather icon-sidebar'
+                        },
+                        {
+                            id: 'usuarios',
+                            title: 'Usuários',
+                            type: 'item',
+                            url: '/cadastros/usuarios',
+                            classes: 'nav-item',
+                            icon: 'feather icon-sidebar'
+                        },
                     ]
                 },
             ]

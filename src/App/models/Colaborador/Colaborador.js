@@ -8,7 +8,7 @@ export default class Colaborador {
         this.dataNascimento = obj['dataNascimento'];
         this.telefoneFixo = obj['telefoneFixo'];
         this.telefoneCelular = obj['telefoneCelular'];
-        this.estadoCivil = obj['estadoCivil'];
+        this.estadoCivil = obj['estadoCivil'] || "SOLTEIRO";
         this.cep = obj['cep'];
         this.codigoMunicipio = obj['codigoMunicipio'];
         this.numero = obj['numero'];

@@ -16,17 +16,21 @@ import MenuItem from "@material-ui/core/MenuItem";
 import messageService from "src/App/services/MessageService.js";
 import Grid from "@material-ui/core/Grid";
 import cepService from "src/App/services/Cep/CepService.js";
+import MunicipioAutoComplete from '../../../components/Autocomplete/MunicipioAutoComplete';
+import { CircularProgress } from "@material-ui/core";
 
 class ColaboradorFormInfGerais extends FormikComponent {
   state = {
-
+    loadingCep: false
   };
 
   componentDidMount() {
+
   }
 
   buscarCep = async (codigo) => {
     if (codigo && codigo.length === 8) {
+      this.setState({loadingCep: true});
       cepService
         .getByCodigo(onlyNumbers(codigo))
         .then((data) => {
@@ -35,15 +39,18 @@ class ColaboradorFormInfGerais extends FormikComponent {
           this.props.setFieldValue("municipio", data.municipio, true);
           this.props.setFieldValue("codigoMunicipio", data.ibge, true);
           this.props.setFieldValue("cep", onlyNumbers(data.cep), true);
+          this.setState({loadingCep: false});
         })
         .catch((error) => {
           this.props.setFieldValue("cep", "", true);
+          this.setState({loadingCep: false});
           if (error && error.data) {
             messageService.errorMessage(error.data.error, error.data.message);
           }
         });
     }
   };
+
 
   render() {
     const {
@@ -60,13 +67,12 @@ class ColaboradorFormInfGerais extends FormikComponent {
         logradouro,
         numero,
         bairro,
-        complemento,
-        municipio,
+        complemento
       },
       errors,
       touched,
     } = this.props;
-console.log(errors, touched)
+
     return (
       <React.Fragment>
         <Card.Body>
@@ -135,7 +141,7 @@ console.log(errors, touched)
                   name="estadoCivil"
                   helperText={touched.estadoCivil ? errors.estadoCivil : ""}
                   error={touched.estadoCivil && Boolean(errors.estadoCivil)}
-                  value={estadoCivil || "SOLTEIRO"}
+                  value={estadoCivil}
                   onChange={this.change.bind(null, "estadoCivil")}
                   onBlur={this.blur.bind(null, "estadoCivil")}
                   label="Estado Civil"
@@ -211,7 +217,14 @@ console.log(errors, touched)
                     this.buscarCep(cep);
                   }}
                   label="Cep"
-                  inputProps={{ maxLength: 9 }}
+                  inputProps={{maxLength: 9}}
+                  InputProps={{
+                    endAdornment: (
+                      <React.Fragment>
+                        {this.state.loadingCep ? <CircularProgress color="inherit" size={20} /> : null}
+                      </React.Fragment>
+                    ),
+                  }}
                   fullWidth
                 />
               </Grid>
@@ -268,21 +281,7 @@ console.log(errors, touched)
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={4}>
-                <TextField
-                  id="municipio"
-                  name="municipio"
-                  helperText={touched.municipio ? errors.municipio : ""}
-                  error={touched.municipio && Boolean(errors.municipio)}
-                  value={
-                    municipio
-                      ? `${municipio.nome} - ${municipio.estado.sigla}`
-                      : ""
-                  }
-                  onChange={this.change.bind(null, "municipio")}
-                  onBlur={this.blur.bind(null, "municipio")}
-                  label="Município"
-                  fullWidth
-                />
+                  <MunicipioAutoComplete {...this.props}/>
               </Grid>
             </Grid>
           </Box>

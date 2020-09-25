@@ -13,6 +13,7 @@ const ColaboradorPage = React.lazy(() => import('./App/views/cadastros/Colaborad
 const ColaboradorFormPage = React.lazy(() => import('./App/views/cadastros/Colaborador/ColaboradorForm'));
 
 const AcionistaPage = React.lazy(() => import('./App/views/cadastros/Acionista/AcionistaView'));
+const AcionistaFormPage = React.lazy(() => import('./App/views/cadastros/Acionista/AcionistaForm'));
 
 const UsuarioPage = React.lazy(() => import('./App/views/cadastros/Usuario/UsuarioView'));
 
@@ -23,6 +24,7 @@ const routes = [
     { path: '/cadastros/colaboradores', exact: true, name: 'Colaboradores', component: ColaboradorPage },
     { path: '/cadastros/colaboradores/:id', exact: false, name: 'Colaboradores Form', component: ColaboradorFormPage },
     { path: '/cadastros/acionistas', exact: true, name: 'Acionistas', component: AcionistaPage },
+    { path: '/cadastros/acionistas/:id', exact: false, name: 'Acionistas Form', component: AcionistaFormPage },
     { path: '/cadastros/usuarios', exact: true, name: 'Usuários', component: UsuarioPage },
 ];
 

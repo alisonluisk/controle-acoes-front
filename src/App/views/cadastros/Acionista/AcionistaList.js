@@ -1,10 +1,20 @@
 import React from "react";
 import CustomTable from "src/App/components/Tables/CustomTable.js";
-import { maskCpfCnpj } from "src/App/utils/formatterHelper";
+import { maskCpfCnpj, maskContaIBolsa, maskTelefone } from "src/App/utils/formatterHelper";
 
 const AcionistaList = (props) => {
   
   const columns = [
+    {
+      id: 'conta',
+      label: 'Conta',
+      width: '10%',
+      sort: true,
+      filter: true,
+      disablePadding: false,
+      align: 'left',
+      mask: maskContaIBolsa
+    },
     {
       id: 'cpfCnpj',
       label: 'CPF/CNPJ',
@@ -16,18 +26,9 @@ const AcionistaList = (props) => {
       mask: maskCpfCnpj
     },
     {
-      id: 'conta',
-      label: 'Conta',
-      width: '10%',
-      sort: true,
-      filter: true,
-      disablePadding: false,
-      align: 'left',
-    },
-    {
       id: 'nome',
       label: 'Nome',
-      width: '45%',
+      width: '39%',
       sort: true,
       filter: true,
       disablePadding: false,
@@ -36,21 +37,23 @@ const AcionistaList = (props) => {
     {
       id: 'telefoneFixo',
       label: 'Telefone',
-      width: '10%',
+      width: '13%',
       sort: true,
       filter: true,
       disablePadding: false,
       align: 'left',
+      mask: maskTelefone
     },
 
     {
       id: 'telefoneCelular',
       label: 'Celular',
-      width: '10%',
+      width: '13%',
       sort: true,
       filter: true,
       disablePadding: false,
       align: 'left',
+      mask: maskTelefone
     },
     {
       id: 'acoes',

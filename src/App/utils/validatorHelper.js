@@ -1,3 +1,12 @@
+export function validarCpfCnpj(text){
+    if(!text)
+        return true;
+
+    if (text.length <= 11)
+        return validarCPF(text);
+    return validarCNPJ(text);
+}
+
 export function validarCNPJ(cnpj) {
     if(!cnpj)
         return true;

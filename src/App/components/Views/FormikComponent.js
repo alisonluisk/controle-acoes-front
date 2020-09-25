@@ -18,6 +18,7 @@ class FormikComponent extends Component {
     };
 
     changeAutoComplete = (e, value, name) => {
+      console.log(name, value?.codigo || "")
       this.props.setFieldValue(name, value?.codigo || "");
       this.props.setFieldTouched(name, true, false);
     };

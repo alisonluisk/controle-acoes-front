@@ -1,6 +1,6 @@
 import React from "react";
 import CustomTable from "src/App/components/Tables/CustomTable.js";
-import { maskCpf } from "src/App/utils/formatterHelper";
+import { maskCpf, maskTelefone } from "src/App/utils/formatterHelper";
 
 const ColaboradorList = (props) => {
   
@@ -27,21 +27,23 @@ const ColaboradorList = (props) => {
     {
       id: 'telefoneFixo',
       label: 'Telefone',
-      width: '10%',
+      width: '12%',
       sort: true,
       filter: true,
       disablePadding: false,
       align: 'left',
+      mask: maskTelefone
     },
 
     {
       id: 'telefoneCelular',
       label: 'Celular',
-      width: '15%',
+      width: '12%',
       sort: true,
       filter: true,
       disablePadding: false,
       align: 'left',
+      mask: maskTelefone
     },
     {
       id: 'acoes',

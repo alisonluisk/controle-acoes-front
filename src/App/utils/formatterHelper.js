@@ -116,6 +116,8 @@ export function maskIntegerValue(text) {
 }
 
 export function onlyNumbers(text){
+    if(!text)
+        return undefined;
     return text.replace(/\D/g,"");
 }
 
@@ -123,4 +125,22 @@ export function statusAcoesToDesc(status){
     if(status === "EM_ANDAMENTO") return "Em andamento";
     if(status === "AGUARDANDO") return "Aguardando";
     if(status === "CONCLUIDO") return "Concluído";
+}
+
+export function maskContaBanco(text) {
+    if(!text)
+        return undefined;
+    if(text.length < 3)
+        return text.replace(/\D/g,"");
+    let valor = text.replace(/\D/g,"");
+    let digito = valor.substr(-1);
+    valor = valor.substr(0, valor.length-1);
+    valor = valor.concat("-", digito);
+    return valor;
+}
+
+export function maskContaIBolsa(text){
+    if(!text)
+        return undefined;
+    return text.toString().padStart(7, '0');
 }

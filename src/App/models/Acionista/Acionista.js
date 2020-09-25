@@ -22,7 +22,7 @@ export default class Acionista {
 
         this.representante = obj['representante'];
         this.cpfRepresentante = obj['cpfRepresentante'];
-        this.banco = obj['banco'];
+        this.banco = obj['banco'] || "260";
         this.agencia = obj['agencia'];
         this.numeroConta = obj['numeroConta'];
         this.cpfContaBanco = obj['cpfContaBanco'];

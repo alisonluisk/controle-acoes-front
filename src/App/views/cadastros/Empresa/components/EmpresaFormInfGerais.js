@@ -22,10 +22,12 @@ import EmpresaFormAcoes from "./EmpresaFormAcoes";
 import moment from "moment";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
+import { CircularProgress } from "@material-ui/core";
 
 class EmpresaFormInfGerais extends FormikComponent {
   state = {
     matrizes: [],
+    loadingCep: false
   };
 
   componentDidMount() {
@@ -45,6 +47,7 @@ class EmpresaFormInfGerais extends FormikComponent {
 
   buscarCep = async (codigo) => {
     if (codigo && codigo.length === 8) {
+      this.setState({loadingCep: true});
       cepService
         .getByCodigo(onlyNumbers(codigo))
         .then((data) => {
@@ -53,9 +56,11 @@ class EmpresaFormInfGerais extends FormikComponent {
           this.props.setFieldValue("municipio", data.municipio, true);
           this.props.setFieldValue("codigoMunicipio", data.ibge, true);
           this.props.setFieldValue("cep", onlyNumbers(data.cep), true);
+          this.setState({loadingCep: false});
         })
         .catch((error) => {
           this.props.setFieldValue("cep", "", true);
+          this.setState({loadingCep: false});
           if (error && error.data) {
             messageService.errorMessage(error.data.error, error.data.message);
           }
@@ -320,7 +325,14 @@ class EmpresaFormInfGerais extends FormikComponent {
                     this.buscarCep(cep);
                   }}
                   label="Cep"
-                  inputProps={{ maxLength: 9 }}
+                  inputProps={{maxLength: 9}}
+                  InputProps={{
+                    endAdornment: (
+                      <React.Fragment>
+                        {this.state.loadingCep ? <CircularProgress color="inherit" size={20} /> : null}
+                      </React.Fragment>
+                    ),
+                  }}
                   fullWidth
                 />
               </Grid>

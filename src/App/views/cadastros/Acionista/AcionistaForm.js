@@ -2,32 +2,32 @@ import React from "react";
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { Row, Col, Tabs, Tab } from "react-bootstrap";
-import Colaborador from 'src/App/models/Colaborador/Colaborador';
 import BreadcrumbForm from 'src/App/components/Views/BreadcrumbForm';
 import FormComponent from 'src/App/components/Views/FormComponent';
-import colaboradorService from "src/App/services/Colaborador/ColaboradorService.js";
-import ColaboradorFormInfGerais from './ColaboradorFormInfGerais';
-import { validarCPF } from "src/App/utils/validatorHelper";
+import acionistaService from "src/App/services/Acionista/AcionistaService.js";
+import AcionistaFormInfGerais from './AcionistaFormInfGerais';
+import { validarCPF, validarCpfCnpj } from "src/App/utils/validatorHelper";
+import Acionista from "src/App/models/Acionista/Acionista";
 
 const validationSchema = yup.object({
-
+  cpfCnpj: yup.string().required("CPF/CNPJ é obrigatório").test('CPF/CNPJ is Valid', 'CPF/CNPJ é invalido',  value=> validarCpfCnpj(value)),
   nome: yup.string().required("Nome é obrigatório"),
   logradouro: yup.string().required("Endereço é obrigatório"),
   email: yup.string().nullable().email("E-mail inválido"),
   bairro: yup.string().required("Bairro é obrigatório"),
-  codigoMunicipio: yup.number().required("Município é obrigatório"),
   numero: yup.number().typeError("Número é obrigatório").required("Número é obrigatório"),
-  cpf: yup.string().required("CPF é obrigatório").test('CPF is Valid', 'CPF é invalido',  value=> validarCPF(value)),
   dataNascimento: yup.object().nullable().test('Data inválida', 'Data é inválida', value=> 
     value ? value.isValid() && !value.isAfter() : true 
   ),
+  cpfRepresentante: yup.string().nullable().test('CPF is Valid', 'CPF é invalido',  value=> validarCPF(value)),
+  cpfContaBanco: yup.string().nullable().test('CPF is Valid', 'CPF é invalido',  value=> validarCPF(value)),
 });
 
-class ColaboradorForm extends FormComponent {
+class AcionistaForm extends FormComponent {
 
   state = {
     idx: '',
-    colaborador: undefined,
+    acionista: undefined,
   }
 
   componentDidMount() {
@@ -35,29 +35,29 @@ class ColaboradorForm extends FormComponent {
       if(this.props.match.params.id === 'novo') {
         this.setState({
           idx: 'Novo',
-          colaborador: new Colaborador({})
+          acionista: new Acionista({})
         })
       } else if (Number(this.props.match.params.id)) {
-        this.getByCodigo(colaboradorService, this.props.match.params.id).then(data => {
+        this.getByCodigo(acionistaService, this.props.match.params.id).then(data => {
           this.setState({
             idx: data.codigo,
-            colaborador: new Colaborador(data)
+            acionista: new Acionista(data)
           })
         });
       }
     }
   }
 
-  salvar = async(colaborador) => {
-    await this.salvarModel(colaboradorService, colaborador);
+  salvar = async(acionista) => {
+    await this.salvarModel(acionistaService, acionista);
     this.props.history.goBack();
   }
 
   render() {
-    if(this.state.colaborador)
+    if(this.state.acionista)
       return (
         <Formik
-          initialValues={this.state.colaborador}
+          initialValues={this.state.acionista}
           validationSchema={validationSchema}
           enableReinitialize={true}
           onSubmit={values => {
@@ -68,8 +68,8 @@ class ColaboradorForm extends FormComponent {
             <React.Fragment>
               <BreadcrumbForm 
                 idx={this.state.idx} 
-                title={'Novo Colaborador'} 
-                viewPath={{title: 'Colaboradores', url: '/cadastros/colaboradores'}}
+                title={'Novo Acionista'} 
+                viewPath={{title: 'Acionistas', url: '/cadastros/acionistas'}}
                 saveResource={props.handleSubmit} 
                 disabled={!props.dirty || !props.isValid} 
               />
@@ -77,7 +77,7 @@ class ColaboradorForm extends FormComponent {
                 <Col>
                   <Tabs defaultActiveKey="inf-gerais">
                     <Tab eventKey="inf-gerais" title={`Informações gerais`}>
-                      <ColaboradorFormInfGerais {...props}/>
+                      <AcionistaFormInfGerais {...props}/>
                     </Tab>
                   </Tabs>
                 </Col>
@@ -93,4 +93,4 @@ class ColaboradorForm extends FormComponent {
   }
 };
 
-export default ColaboradorForm;
+export default AcionistaForm;

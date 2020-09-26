@@ -2,8 +2,8 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import TextField from "src/App/components/TextFields/TextField";
 import DateField from "src/App/components/TextFields/DateField";
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import FormikComponent from "src/App/components/Views/FormikComponent";
@@ -24,20 +24,22 @@ import Grid from "@material-ui/core/Grid";
 import cepService from "src/App/services/Cep/CepService.js";
 import MunicipioAutoComplete from "src/App/components/Autocomplete/MunicipioAutoComplete";
 import { CircularProgress } from "@material-ui/core";
-import listaBancos from 'src/App/utils/lista_bancos.json'
+import listaBancos from "src/App/utils/lista_bancos.json";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { validarCNPJ } from "src/App/utils/validatorHelper";
 
 class AcionistaFormInfGerais extends FormikComponent {
   state = {
-    titularConta: (this.props.values.cpfContaBanco ? false : true),
-    loadingCep: false
+    titularConta: this.props.values.cpfContaBanco ? false : true,
+    isPessoaJuridica: false,
+    loadingCep: false,
   };
 
   componentDidMount() {}
 
   buscarCep = async (codigo) => {
     if (codigo && codigo.length === 8) {
-      this.setState({loadingCep: true});
+      this.setState({ loadingCep: true });
       cepService
         .getByCodigo(onlyNumbers(codigo))
         .then((data) => {
@@ -46,11 +48,11 @@ class AcionistaFormInfGerais extends FormikComponent {
           this.props.setFieldValue("municipio", data.municipio, true);
           this.props.setFieldValue("codigoMunicipio", data.ibge, true);
           this.props.setFieldValue("cep", onlyNumbers(data.cep), true);
-          this.setState({loadingCep: false});
+          this.setState({ loadingCep: false });
         })
         .catch((error) => {
           this.props.setFieldValue("cep", "", true);
-          this.setState({loadingCep: false});
+          this.setState({ loadingCep: false });
           if (error && error.data) {
             messageService.errorMessage(error.data.error, error.data.message);
           }
@@ -81,7 +83,7 @@ class AcionistaFormInfGerais extends FormikComponent {
         agencia,
         numeroConta,
         cpfContaBanco,
-        nomeContaBanco
+        nomeContaBanco,
       },
       errors,
       touched,
@@ -89,26 +91,37 @@ class AcionistaFormInfGerais extends FormikComponent {
     } = this.props;
     
     const handleChangeTitularConta = (event) => {
-      this.setState({ ...this.state, [event.target.name]: event.target.checked });
-      if(!event.target.checked){
+      this.setState({
+        ...this.state,
+        [event.target.name]: event.target.checked,
+      });
+      if (!event.target.checked) {
         setFieldValue("cpfContaBanco", undefined, false);
         setFieldValue("nomeContaBanco", undefined, false);
       }
     };
-    
+
+    const onChangeCpfCnpj = (name, event) => {
+      this.changeNumber(name, event);
+      this.setState({...this.state, "isPessoaJuridica": validarCNPJ(event.target.value)});
+    };
+
     return (
       <React.Fragment>
         <Card.Body>
-        <Box width="100%" display="flex" flexDirection="column">
+          <Box width="100%" display="flex" flexDirection="column">
             <Grid container style={{ paddingBottom: "7px" }} spacing={1}>
               <Grid item xs={12} sm={6} md={4} lg={3}>
                 <TextField
+                  autoFocus
                   id="cpfCnpj"
                   name="cpfCnpj"
                   helperText={touched.cpfCnpj ? errors.cpfCnpj : ""}
                   error={touched.cpfCnpj && Boolean(errors.cpfCnpj)}
                   value={maskCpfCnpj(cpfCnpj) || ""}
-                  onChange={this.changeNumber.bind(null, "cpfCnpj")}
+                  onChange={(e) => {
+                    onChangeCpfCnpj("cpfCnpj", e);
+                  }}
                   onBlur={(e) => {
                     this.blur("cpfCnpj", e);
                   }}
@@ -190,6 +203,7 @@ class AcionistaFormInfGerais extends FormikComponent {
               <Grid item xs={12} sm={6} md={4} lg={2}>
                 <TextField
                   select
+                  disabled={this.state.isPessoaJuridica}
                   id="estadoCivil"
                   name="estadoCivil"
                   helperText={touched.estadoCivil ? errors.estadoCivil : ""}
@@ -210,6 +224,7 @@ class AcionistaFormInfGerais extends FormikComponent {
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={2}>
                 <DateField
+                  disabled={this.state.isPessoaJuridica}
                   id="dataNascimento"
                   name="dataNascimento"
                   helperText={
@@ -259,11 +274,13 @@ class AcionistaFormInfGerais extends FormikComponent {
                     this.buscarCep(cep);
                   }}
                   label="Cep"
-                  inputProps={{maxLength: 9}}
+                  inputProps={{ maxLength: 9 }}
                   InputProps={{
                     endAdornment: (
                       <React.Fragment>
-                        {this.state.loadingCep ? <CircularProgress color="inherit" size={20} /> : null}
+                        {this.state.loadingCep ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
                       </React.Fragment>
                     ),
                   }}
@@ -323,75 +340,92 @@ class AcionistaFormInfGerais extends FormikComponent {
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={4} lg={4}>
-                <MunicipioAutoComplete {...this.props}/>
+                <MunicipioAutoComplete {...this.props} />
               </Grid>
             </Grid>
-            <Typography variant="overline" display="block" gutterBottom>
-              Representante
-            </Typography>
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
-                <TextField
-                  id="representante"
-                  name="representante"
-                  helperText={touched.representante ? errors.representante : ""}
-                  error={touched.representante && Boolean(errors.representante)}
-                  value={representante || ""}
-                  onChange={this.change.bind(null, "representante")}
-                  onBlur={this.blur.bind(null, "representante")}
-                  label="Representante Legal"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} lg={3}>
-                <TextField
-                  id="cpfRepresentante"
-                  name="cpfRepresentante"
-                  helperText={
-                    touched.cpfRepresentante ? errors.cpfRepresentante : ""
-                  }
-                  error={
-                    touched.cpfRepresentante && Boolean(errors.cpfRepresentante)
-                  }
-                  value={maskCpf(cpfRepresentante) || ""}
-                  onChange={this.changeNumber.bind(null, "cpfRepresentante")}
-                  onBlur={(e) => {
-                    this.blur("cpfRepresentante", e);
-                  }}
-                  label="CPF do Representante"
-                  fullWidth
-                  inputProps={{ maxLength: 14 }}
-                />
-              </Grid>
-            </Grid>
+            {this.state.isPessoaJuridica &&
+            (
+              <React.Fragment>
+                <Typography variant="overline" display="block" gutterBottom>
+                  Representante
+                </Typography>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} sm={6} md={6} lg={6}>
+                    <TextField
+                      id="representante"
+                      name="representante"
+                      helperText={
+                        touched.representante ? errors.representante : ""
+                      }
+                      error={
+                        touched.representante && Boolean(errors.representante)
+                      }
+                      value={representante || ""}
+                      onChange={this.change.bind(null, "representante")}
+                      onBlur={this.blur.bind(null, "representante")}
+                      label="Representante Legal"
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <TextField
+                      id="cpfRepresentante"
+                      name="cpfRepresentante"
+                      helperText={
+                        touched.cpfRepresentante ? errors.cpfRepresentante : ""
+                      }
+                      error={
+                        touched.cpfRepresentante &&
+                        Boolean(errors.cpfRepresentante)
+                      }
+                      value={maskCpf(cpfRepresentante) || ""}
+                      onChange={this.changeNumber.bind(
+                        null,
+                        "cpfRepresentante"
+                      )}
+                      onBlur={(e) => {
+                        this.blur("cpfRepresentante", e);
+                      }}
+                      label="CPF do Representante"
+                      fullWidth
+                      inputProps={{ maxLength: 14 }}
+                    />
+                  </Grid>
+                </Grid>
+              </React.Fragment>
+            )}
             <Typography variant="overline" display="block" gutterBottom>
               Dados Bancários
             </Typography>
             <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-              <Autocomplete
-                id="conta-autocomplete"
-                options={listaBancos}
-                getOptionLabel={(option) => { return option ? `${option.codigo} - ${option.banco}` : ""}}
-                value={findBancoByCodigo(banco) || ""}
-                getOptionSelected={(option, value) => option.codigo === value.codigo}
-                onBlur={this.blur.bind(null, "banco")}
-                onChange={(e, value) => {
-                  this.changeAutoComplete(e, value, "banco");
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    name="banco"
-                    id="banco"
-                    helperText={touched.banco ? errors.banco : ""}
-                    error={touched.banco && Boolean(errors.banco)}
-                    label="Banco"
-                    variant="outlined"
-                    fullWidth
-                  />
-                )}
-              />
+              <Grid item xs={12} sm={6} md={4} lg={3}>
+                <Autocomplete
+                  id="conta-autocomplete"
+                  options={listaBancos}
+                  getOptionLabel={(option) => {
+                    return option ? `${option.codigo} - ${option.banco}` : "";
+                  }}
+                  value={findBancoByCodigo(banco) || ""}
+                  getOptionSelected={(option, value) =>
+                    option.codigo === value.codigo
+                  }
+                  onBlur={this.blur.bind(null, "banco")}
+                  onChange={(e, value) => {
+                    this.changeAutoComplete(e, value, "banco");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      name="banco"
+                      id="banco"
+                      helperText={touched.banco ? errors.banco : ""}
+                      error={touched.banco && Boolean(errors.banco)}
+                      label="Banco"
+                      variant="outlined"
+                      fullWidth
+                    />
+                  )}
+                />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={2}>
                 <TextField
@@ -421,55 +455,60 @@ class AcionistaFormInfGerais extends FormikComponent {
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3} lg={5}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={this.state.titularConta}
-                    onChange={handleChangeTitularConta}
-                    name="titularConta"
-                    color="primary"
-                  />
-                }
-                label="Este acionista é titular da conta?"
-              />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={this.state.titularConta}
+                      onChange={handleChangeTitularConta}
+                      name="titularConta"
+                      color="primary"
+                    />
+                  }
+                  label="Este acionista é titular da conta?"
+                />
               </Grid>
             </Grid>
             {!this.state.titularConta && (
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={6} md={4} lg={3}>
-                <TextField
-                  id="cpfContaBanco"
-                  name="cpfContaBanco"
-                  helperText={
-                    touched.cpfContaBanco ? errors.cpfContaBanco : ""
-                  }
-                  error={
-                    touched.cpfContaBanco && Boolean(errors.cpfContaBanco)
-                  }
-                  value={maskCpf(cpfContaBanco) || ""}
-                  onChange={this.changeNumber.bind(null, "cpfContaBanco")}
-                  onBlur={(e) => {
-                    this.blur("cpfContaBanco", e);
-                  }}
-                  label="CPF do Titular"
-                  fullWidth
-                  inputProps={{ maxLength: 14 }}
-                />
+              <Grid container spacing={1}>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <TextField
+                    id="cpfContaBanco"
+                    name="cpfContaBanco"
+                    helperText={
+                      touched.cpfContaBanco ? errors.cpfContaBanco : ""
+                    }
+                    error={
+                      touched.cpfContaBanco && Boolean(errors.cpfContaBanco)
+                    }
+                    value={maskCpf(cpfContaBanco) || ""}
+                    onChange={this.changeNumber.bind(null, "cpfContaBanco")}
+                    onBlur={(e) => {
+                      this.blur("cpfContaBanco", e);
+                    }}
+                    label="CPF do Titular"
+                    fullWidth
+                    inputProps={{ maxLength: 14 }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                  <TextField
+                    id="nomeContaBanco"
+                    name="nomeContaBanco"
+                    helperText={
+                      touched.nomeContaBanco ? errors.nomeContaBanco : ""
+                    }
+                    error={
+                      touched.nomeContaBanco && Boolean(errors.nomeContaBanco)
+                    }
+                    value={nomeContaBanco || ""}
+                    onChange={this.change.bind(null, "nomeContaBanco")}
+                    onBlur={this.blur.bind(null, "nomeContaBanco")}
+                    label="Nome do Titular"
+                    fullWidth
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6}>
-                <TextField
-                  id="nomeContaBanco"
-                  name="nomeContaBanco"
-                  helperText={touched.nomeContaBanco ? errors.nomeContaBanco : ""}
-                  error={touched.nomeContaBanco && Boolean(errors.nomeContaBanco)}
-                  value={nomeContaBanco || ""}
-                  onChange={this.change.bind(null, "nomeContaBanco")}
-                  onBlur={this.blur.bind(null, "nomeContaBanco")}
-                  label="Nome do Titular"
-                  fullWidth
-                />
-              </Grid>
-            </Grid>)}
+            )}
           </Box>
         </Card.Body>
       </React.Fragment>

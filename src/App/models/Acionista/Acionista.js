@@ -7,7 +7,7 @@ export default class Acionista {
         this.email = obj['email'];
         this.dataNascimento = obj['dataNascimento'];
         this.rgInscricao = obj['rgInscricao'];
-        this.estadoCivil = obj['estadoCivil'];
+        this.estadoCivil = obj['estadoCivil'] || "SOLTEIRO";
         this.telefoneFixo = obj['telefoneFixo'];
         this.telefoneCelular = obj['telefoneCelular'];
 
@@ -22,7 +22,7 @@ export default class Acionista {
 
         this.representante = obj['representante'];
         this.cpfRepresentante = obj['cpfRepresentante'];
-        this.banco = obj['banco'] || "260";
+        this.banco = obj['banco'];
         this.agencia = obj['agencia'];
         this.numeroConta = obj['numeroConta'];
         this.cpfContaBanco = obj['cpfContaBanco'];

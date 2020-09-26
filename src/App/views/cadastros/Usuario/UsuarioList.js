@@ -7,7 +7,7 @@ const UsuarioList = (props) => {
     {
       id: 'usuario',
       label: 'Usuário',
-      width: '25%',
+      width: '35%',
       sort: true,
       filter: true,
       disablePadding: false,
@@ -16,24 +16,14 @@ const UsuarioList = (props) => {
     {
       id: 'colaborador.nome',
       label: 'Colaborador',
-      width: '25%',
+      width: '35%',
       sort: true,
       filter: true,
       disablePadding: false,
       align: 'left',
     },
     {
-      id: 'acionista.nome',
-      label: 'Acionista',
-      width: '25%',
-      sort: true,
-      filter: true,
-      disablePadding: false,
-      align: 'left',
-    },
-
-    {
-      id: 'perfil.nome',
+      id: 'perfilUsuario.nome',
       label: 'Perfil',
       width: '15%',
       sort: true,

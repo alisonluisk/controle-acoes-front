@@ -2,6 +2,8 @@
 import listaBancos from 'src/App/utils/lista_bancos.json'
 
 export default function findBancoByCodigo(codigo){
+    if(!codigo)
+        return undefined;
     var index = listaBancos.findIndex(function (value) {
         return value.codigo === formatCodigoBanco(codigo);
     });

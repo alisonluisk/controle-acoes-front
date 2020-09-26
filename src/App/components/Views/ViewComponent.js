@@ -62,7 +62,7 @@ class ViewComponent extends Component {
   salvarModel = (service, model) => {
     return new Promise((resolve, reject) => {
       service.salvar(model).then((data) => {
-        if(model.codigo){
+        if(model.id){
           messageService.successMessage("Sucesso", "Registro alterado com sucesso!");
           this.joinModelToResourceAtivos(data);
           resolve(data);

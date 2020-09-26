@@ -16,6 +16,7 @@ const validationSchema = yup.object({
   email: yup.string().nullable().email("E-mail inválido"),
   bairro: yup.string().required("Bairro é obrigatório"),
   numero: yup.number().typeError("Número é obrigatório").required("Número é obrigatório"),
+  codigoMunicipio: yup.number().required("Município é obrigatório"),
   dataNascimento: yup.object().nullable().test('Data inválida', 'Data é inválida', value=> 
     value ? value.isValid() && !value.isAfter() : true 
   ),

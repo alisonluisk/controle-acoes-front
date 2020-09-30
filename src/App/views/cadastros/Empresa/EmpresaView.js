@@ -95,13 +95,13 @@ class EmpresaView extends ViewComponent {
             <Tabs defaultActiveKey="ativos">
               <Tab
                 eventKey="ativos"
-                title={`Ativos (${resourceAtivos.length})`}
+                title={`Ativos`}
               >
                 <EmpresaList isDesativados={false} data={resourceAtivos} botoes={this.botoesAbaAtivos} ativarDesativar={this.ativarDesativar} editar={this.editar} editarParametroEmpresa={this.editarParametroEmpresa}/>
               </Tab>
               <Tab
                 eventKey="desativados"
-                title={`Desativados (${resourceDesativados.length})`}
+                title={`Desativados`}
               >
                 <EmpresaList isDesativados={true} data={resourceDesativados} ativarDesativar={this.ativarDesativar} editar={this.editar}/>
               </Tab>

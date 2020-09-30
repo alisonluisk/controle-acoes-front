@@ -3,18 +3,19 @@ import { Row, Col, Tabs, Tab } from "react-bootstrap";
 import AcionistaList from "./AcionistaList.js";
 import acionistaService from "src/App/services/Acionista/AcionistaService.js";
 import Breadcrumb from 'src/App/layout/AdminLayout/Breadcrumb/index.js';
-import ViewComponent from 'src/App/components/Views/ViewComponent.js';
+import ViewPaginadaComponent from 'src/App/components/Views/ViewPaginadaComponent.js';
 
-class AcionistaView extends ViewComponent {
+class AcionistaView extends ViewPaginadaComponent {
 
   state = {
     resourceAtivos: [],
+    totalAtivos: 0,
     resourceDesativados: [],
-    showModal: false
+    totalDesativados: 0,
+    idxTab: "ativos" 
   };
 
   componentDidMount() {
-    this.buscarAtivosDesativados(acionistaService);
   }
 
   novo = () => {
@@ -25,45 +26,45 @@ class AcionistaView extends ViewComponent {
     this.props.history.push(`/cadastros/acionistas/${acionista.id}`)
   }
 
-  ativarDesativar = (acionista, ativar) => {
-    this.ativarDesativarModel(acionistaService, acionista, ativar);
+  ativarDesativar = (acionista, ativar, paginacao) => {
+    this.ativarDesativarModel(acionistaService, acionista.id, ativar, paginacao);
   }
 
-  salvar = async (acionista) => {
-    await this.salvarModel(acionistaService, acionista);
+  buscarDadosAtivos = async (page, size, order, sortDirect, search) => {
+    this.buscarDadosPaginados(acionistaService, page, size, order, sortDirect, true, search);
   }
+
+  buscarDadosDesativados = async (page, size, order, sortDirect, search) => {
+    this.buscarDadosPaginados(acionistaService, page, size, order, sortDirect, false, search);
+  }
+
+  handleChangeTab = (value) => {
+    this.setState({idxTab: value});
+  };
   
   render() {
-    const { resourceAtivos, resourceDesativados } = this.state;
+    const { resourceAtivos, resourceDesativados, totalAtivos, totalDesativados, idxTab } = this.state;
     return (
       <React.Fragment>
         <Breadcrumb newResource={this.novo}/>
         <Row>
           <Col>
-            <Tabs defaultActiveKey="ativos">
+            <Tabs onSelect={(k) => this.handleChangeTab(k)} defaultActiveKey="ativos">
               <Tab
                 eventKey="ativos"
-                title={`Ativos (${resourceAtivos.length})`}
+                title={`Ativos`}
               >
-                <AcionistaList isDesativados={false} data={resourceAtivos} ativarDesativar={this.ativarDesativar} editar={this.editar} />
+                <AcionistaList isDesativados={false} data={resourceAtivos} editar={this.editar} ativarDesativar={this.ativarDesativar} buscarDadosPaginados={this.buscarDadosAtivos} totalRegistros={totalAtivos} idxTabAtiva={idxTab} />
               </Tab>
               <Tab
                 eventKey="desativados"
-                title={`Desativados (${resourceDesativados.length})`}
+                title={`Desativados`}
               >
-                <AcionistaList isDesativados={true} data={resourceDesativados} ativarDesativar={this.ativarDesativar} editar={this.editar}/>
+                <AcionistaList isDesativados={false} data={resourceDesativados} editar={this.editar} ativarDesativar={this.ativarDesativar} buscarDadosPaginados={this.buscarDadosDesativados} totalRegistros={totalDesativados} idxTabAtiva={idxTab}/>
               </Tab>
             </Tabs>
           </Col>
         </Row>
-
-        {/* <ParametroEmpresaModal
-          parametroEmpresa={parametroEmpresa}
-          empresa={empresa}
-          showModal={showModal} 
-          closeModal={(e) =>this.openCloseModal(false)}
-          salvar={this.salvarParametroEmpresa}
-        /> */}
       </React.Fragment>
     );
   }

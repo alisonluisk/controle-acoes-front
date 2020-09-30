@@ -20,19 +20,35 @@ export default class BaseResourceService {
     saveOrUpdate = async(url, data) => {
         let response;
         if(data.id)
-            response = await jwtService.getInterceptor().put(url+`/${data.id}`, data);
+            response = await jwtService.getInterceptor().put(url+`/${data.id}`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
         else
-            response = await jwtService.getInterceptor().post(url, data);
+            response = await jwtService.getInterceptor().post(url, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
         return response;
     }
 
     save = async(url, data) => {
-        let response = await jwtService.getInterceptor().post(url, data);
+        let response = await jwtService.getInterceptor().post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
         return response;
     }
 
     update = async(url, data) => {
-        let response = await jwtService.getInterceptor().put(url, data);
+        let response = await jwtService.getInterceptor().put(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
         return response;
     }
 

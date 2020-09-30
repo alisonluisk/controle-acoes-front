@@ -25,6 +25,10 @@ class ColaboradorService extends BaseResourceService {
         return this.salvarModelo(this.endpoint, colaborador);
     }
 
+    ativarDesativar(id, ativo){
+        return this.update(this.endpoint +`/${id}/set_ativo`, ativo);
+    }
+
     getByCodigo = async (id) => {
         return this.findModelo(this.endpoint, id);
     }

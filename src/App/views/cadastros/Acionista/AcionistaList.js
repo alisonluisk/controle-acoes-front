@@ -1,5 +1,5 @@
 import React from "react";
-import CustomTable from "src/App/components/Tables/CustomTable.js";
+import CustomTablePaginated from "src/App/components/Tables/Paginated/CustomTablePaginated.js";
 import { maskCpfCnpj, maskContaIBolsa, maskTelefone } from "src/App/utils/formatterHelper";
 
 const AcionistaList = (props) => {
@@ -69,7 +69,7 @@ const AcionistaList = (props) => {
 
   return (
     <React.Fragment>
-      <CustomTable
+      <CustomTablePaginated
         columns={columns}
         {...props}
       />

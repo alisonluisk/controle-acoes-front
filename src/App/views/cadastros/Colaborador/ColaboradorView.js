@@ -26,7 +26,7 @@ class ColaboradorView extends ViewComponent {
   }
 
   ativarDesativar = (colaborador, ativar) => {
-    this.ativarDesativarModel(colaboradorService, colaborador, ativar);
+    this.setAtivo(colaboradorService, colaborador, ativar);
   }
 
   salvar = async (colaborador) => {
@@ -43,13 +43,13 @@ class ColaboradorView extends ViewComponent {
             <Tabs defaultActiveKey="ativos">
               <Tab
                 eventKey="ativos"
-                title={`Ativos (${resourceAtivos.length})`}
+                title={`Ativos`}
               >
                 <ColaboradorList isDesativados={false} data={resourceAtivos} ativarDesativar={this.ativarDesativar} editar={this.editar} />
               </Tab>
               <Tab
                 eventKey="desativados"
-                title={`Desativados (${resourceDesativados.length})`}
+                title={`Desativados`}
               >
                 <ColaboradorList isDesativados={true} data={resourceDesativados} ativarDesativar={this.ativarDesativar} editar={this.editar}/>
               </Tab>

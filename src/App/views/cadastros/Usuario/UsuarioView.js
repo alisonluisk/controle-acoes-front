@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Tabs, Tab } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import UsuarioList from "./UsuarioList.js";
 import usuarioService from "src/App/services/Usuario/UsuarioService.js";
 import perfilService from "src/App/services/Usuario/PerfilUsuarioService.js";
@@ -11,14 +11,13 @@ class UsuarioView extends ViewComponent {
 
   state = {
     resourceAtivos: [],
-    resourceDesativados: [],
     showModal: false,
     usuario: undefined,
     perfis: []
   };
 
   componentDidMount() {
-    this.buscarAtivosDesativados(usuarioService);
+    this.buscarAtivados(usuarioService);
     perfilService.getAllAtivos().then(response =>{
       this.setState({perfis: response});
     });
@@ -27,10 +26,6 @@ class UsuarioView extends ViewComponent {
   editar = (usuario) => {
     this.setState({usuario: Object.assign({}, usuario)});
     this.openCloseModal(true);
-  }
-
-  ativarDesativar = (usuario, ativar) => {
-    this.ativarDesativarModel(usuarioService, usuario, ativar);
   }
 
   salvar = async (usuario) => {
@@ -43,26 +38,13 @@ class UsuarioView extends ViewComponent {
   }
   
   render() {
-    const { resourceAtivos, resourceDesativados, showModal, usuario, perfis } = this.state;
+    const { resourceAtivos, showModal, usuario, perfis } = this.state;
     return (
       <React.Fragment>
         <Breadcrumb/>
         <Row>
           <Col>
-            <Tabs defaultActiveKey="ativos">
-              <Tab
-                eventKey="ativos"
-                title={`Ativos (${resourceAtivos.length})`}
-              >
-                <UsuarioList isDesativados={false} data={resourceAtivos} ativarDesativar={this.ativarDesativar} editar={this.editar} />
-              </Tab>
-              <Tab
-                eventKey="desativados"
-                title={`Desativados (${resourceDesativados.length})`}
-              >
-                <UsuarioList isDesativados={true} data={resourceDesativados} ativarDesativar={this.ativarDesativar} editar={this.editar}/>
-              </Tab>
-            </Tabs>
+            <UsuarioList isDesativados={false} data={resourceAtivos}  editar={this.editar} />
           </Col>
         </Row>
 

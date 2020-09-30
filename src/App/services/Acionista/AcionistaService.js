@@ -21,12 +21,20 @@ class AcionistaService extends BaseResourceService {
         return this.getAll(this.endpoint, params);
     }   
 
+    getAllByParamsPageable = async (params) =>{
+        return this.getAll(this.endpoint + '/pageable', params);
+    }
+
     salvar(acionista){
         return this.salvarModelo(this.endpoint, acionista);
     }
 
     getByCodigo = async (id) => {
         return this.findModelo(this.endpoint, id);
+    }
+
+    ativarDesativar(id, ativo){
+        return this.update(this.endpoint +`/${id}/set_ativo`, ativo);
     }
 
 }

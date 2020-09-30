@@ -111,6 +111,7 @@ class CustomTable extends Component {
 
   render() {
     const { order, orderBy, rowsPerPage, page, filtro, data } = this.state;
+
     return (
       <React.Fragment>
         <Row className="p-20">
@@ -143,15 +144,9 @@ class CustomTable extends Component {
                           if(!row2.isAction)
                             if(row2.id.includes('.')) {
                               let row3 = row2.id.split('.');
-                              if(row[row3[0]]){
-                                return (
-                                  <TableCell key={index2}>{
-                                    row2.mask ? row2.mask(row[row3[0]][row3[1]]) : row[row3[0]][row3[1]]
-                                  }</TableCell>
-                                );
-                              }
                               return (
                                 <TableCell key={index2}>{
+                                  row2.mask ? row2.mask(row[row3[0]][row3[1]]) : row[row3[0]][row3[1]]
                                 }</TableCell>
                               );
                             } else {

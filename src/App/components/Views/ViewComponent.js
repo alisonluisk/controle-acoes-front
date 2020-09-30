@@ -4,6 +4,11 @@ import messageService from "src/App/services/MessageService.js";
 class ViewComponent extends Component {
 
   buscarAtivosDesativados(service) {
+    this.buscarAtivados(service);
+    this.buscarDesativados(service)
+  }
+
+  buscarAtivados(service){
     service
       .getAllAtivos()
       .then((data) => {
@@ -15,18 +20,48 @@ class ViewComponent extends Component {
         }
         this.setState({ resourceAtivos: [] });
       });
+  }
 
+  buscarDesativados(service){
     service
-      .getAllDesativados()
-      .then((data) => {
-        this.setState({ resourceDesativados: data });
-      })
-      .catch((error) => {
-        this.setState({ resourceDesativados: [] });
-        if(error && error.data){
-          messageService.errorMessage(error.data.error, error.data.message);
-        }
-      });
+    .getAllDesativados()
+    .then((data) => {
+      this.setState({ resourceDesativados: data });
+    })
+    .catch((error) => {
+      this.setState({ resourceDesativados: [] });
+      if(error && error.data){
+        messageService.errorMessage(error.data.error, error.data.message);
+      }
+    });
+  }
+
+  setAtivo = (service, model, ativar) => {
+    service.ativarDesativar(model.id, ativar).then((data) => {
+      messageService.successMessage("Sucesso", `Registro ${ativar? 'ativado' : 'desativado'} com sucesso!`);
+      if(ativar){
+        let resourceDesativados = [...this.state.resourceDesativados];
+        const index = resourceDesativados.findIndex(element => element.id === model.id);
+        resourceDesativados.splice(index, 1);
+        this.setState(prevState => ({
+          resourceAtivos: [...prevState.resourceAtivos, model],
+          resourceDesativados: resourceDesativados
+        }));
+      }else{
+        let resourceAtivos = [...this.state.resourceAtivos];
+        const index = resourceAtivos.findIndex(element => element.id === model.id);
+        resourceAtivos.splice(index, 1);
+        this.setState(prevState => ({
+          resourceDesativados: [...prevState.resourceDesativados, model],
+          resourceAtivos: resourceAtivos
+        }));
+      }
+    })
+    .catch((error) => {
+      if(error && error.data){
+        messageService.errorMessage(error.data.error, error.data.message);
+      }
+    });
   }
 
   ativarDesativarModel = (service, model, ativar) => {

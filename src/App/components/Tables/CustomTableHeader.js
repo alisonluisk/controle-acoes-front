@@ -23,12 +23,12 @@ class CustomTableHeader extends React.Component {
               key={headCell.id}
               align={headCell.numeric ? "right" : "left"}
               padding={headCell.disablePadding ? "none" : "default"}
-              sortDirection={orderBy === headCell.id ? order : false}
+              sortDirection={orderBy === (headCell.fieldSort ? headCell.fieldSort : headCell.id) ? order : false}
             >
               <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={this.createSortHandler(headCell.id)}
+                active={orderBy === (headCell.fieldSort ? headCell.fieldSort : headCell.id)}
+                direction={orderBy === (headCell.fieldSort ? headCell.fieldSort : headCell.id) ? order : "asc"}
+                onClick={this.createSortHandler((headCell.fieldSort ? headCell.fieldSort : headCell.id))}
               >
                 {headCell.label}
               </TableSortLabel>

@@ -5,7 +5,7 @@ import CustomModal from "src/App/components/Modals/CustomModal.js"
 import UsuarioForm from "./UsuarioForm";
 
 const validationSchema = yup.object({
-  codigoPerfilUsuario: yup.number().required("Perfil é obrigatório")
+  codigoPerfilUsuario: yup.number().typeError("Perfil é obrigatório").required("Perfil é obrigatório")
 });
 
 const UsuarioModal = (props) => {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import jwtDecode from 'jwt-decode';
 
-// const API_CONFIG = "http://3.131.110.79/v1";
+// const API_CONFIG = "http://54.174.116.204/v1";
 const API_CONFIG = "http://localhost:8080/v1";
 // const API_CONFIG = "http://192.168.1.12:8080/v1";
 const PATH_USUARIOS = "/usuarios"

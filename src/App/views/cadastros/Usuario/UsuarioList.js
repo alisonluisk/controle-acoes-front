@@ -23,8 +23,8 @@ const UsuarioList = (props) => {
       align: 'left',
     },
     {
-      id: 'perfilUsuario.nome',
-      label: 'Perfil',
+      id: 'colaborador.telefone',
+      label: 'Telefone',
       width: '15%',
       sort: true,
       filter: true,
@@ -34,7 +34,7 @@ const UsuarioList = (props) => {
     {
       id: 'acoes',
       label: 'Ações',
-      width: '10%',
+      width: '15%',
       sort: false,
       filter: false,
       disablePadding: false,

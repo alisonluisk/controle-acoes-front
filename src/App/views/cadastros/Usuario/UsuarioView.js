@@ -15,6 +15,7 @@ class UsuarioView extends ViewComponent {
     resourceAtivos: [],
     showModal: false,
     showDefinirSenha: false,
+    showAlterarSenha: false,
     usuario: undefined,
     perfis: []
   };
@@ -44,6 +45,9 @@ class UsuarioView extends ViewComponent {
     this.setState({showDefinirSenha: value});
   }
 
+  openCloseModalAlterarSenha = (value) => {
+    this.setState({showAlterarSenha: value});
+  }
 
   openDefinirSenha = (usuario) => {
     this.setState({usuario: Object.assign({}, usuario)});
@@ -52,8 +56,20 @@ class UsuarioView extends ViewComponent {
 
   definirSenha = async (usuario) => {
     usuarioService.definirSenha(usuario).then(data=>{
-      console.log(data)
-      //FECHAR MODAL E RECARREGAR USUARIOS
+      this.buscarAtivados(usuarioService);
+      this.openCloseModalDefinirSenha(false);
+    })
+  }
+
+  openAlterarSenha = (usuario) => {
+    this.setState({usuario: Object.assign({}, usuario)});
+    this.openCloseModalAlterarSenha(true);
+  }
+
+  alterarSenha = async (usuario) => {
+    usuarioService.definirSenha(usuario).then(data=>{
+      this.buscarAtivados(usuarioService);
+      this.openCloseModalDefinirSenha(false);
     })
   }
 
@@ -63,14 +79,9 @@ class UsuarioView extends ViewComponent {
         <IconButton color="primary" title="Editar" component="span" onClick={(e) => this.editar(row)}>
           <i className="feather icon-edit" style={{fontSize: 19}}/>
         </IconButton>
-        {row.senhaConfigurada === false && (
-          <IconButton color="primary" title="Definir senha" component="span" onClick={(e) => this.openDefinirSenha(row)}>
-            <i className="feather icon-settings" style={{fontSize: 19}}/>
-          </IconButton>
-        )}
-        <IconButton color="secondary" aria-label="upload picture" title="Desativar" component="span" onClick={(e) => this.ativarDesativar(row, false)}>
-            <i className="feather icon-trash-2" style={{fontSize: 19}}/>
-          </IconButton>
+        <IconButton color="primary" title="Definir senha" component="span" onClick={(e) => this.openDefinirSenha(row)}>
+            <i className="feather icon-lock" style={{fontSize: 19}}/>
+         </IconButton>
       </React.Fragment>
     );
   }

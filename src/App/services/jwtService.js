@@ -4,7 +4,6 @@ import axios from 'axios';
 // const API_CONFIG = "http://54.174.116.204/v1";
 const API_CONFIG = "http://localhost:8080/v1";
 // const API_CONFIG = "http://192.168.1.12:8080/v1";
-const PATH_USUARIOS = "/usuarios"
 
 const USUARIO_LOGADO = "usuario";
 const TOKEN_AUTH = 'token_auth';
@@ -26,7 +25,7 @@ class jwtService {
                 email: email,
                 password: password
               }).then(response => {
-                if ( response.data && response.data.codigo )
+                if ( response.data )
                 {
                     this.setSession(response);
                     resolve(response.data);
@@ -57,20 +56,6 @@ class jwtService {
     logout = () => {
         this.setSession(null);
     };
-
-    setEmpresaLogada = (usuario, empresa) => {
-        return new Promise((resolve, reject) => {
-            customAxios.put(`${PATH_USUARIOS}/${usuario.codigo}/set_empresa_logada`, {
-                idEmpresa: empresa.codigo
-              }).then(response => {
-                localStorage.setItem(USUARIO_LOGADO, JSON.stringify(response.data));
-                resolve(response.data);
-            }).catch(err => {
-                console.log(err)
-                reject(err);
-            });
-        });
-    }
 
     getUsuarioLogado = () => {
         return JSON.parse(localStorage.getItem(USUARIO_LOGADO));

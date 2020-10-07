@@ -15,10 +15,10 @@ const AdminLayout = Loadable({
   loading: Loader,
 });
 
-// const Login = Loadable({
-//   loader: () => import("./../App/views/Login/Login"),
-//   loading: Loader,
-// });
+const Login = Loadable({
+  loader: () => import("./../App/views/login/Login"),
+  loading: Loader,
+});
 
 class App extends Component {
   constructor(props) {
@@ -32,14 +32,14 @@ class App extends Component {
         <ScrollToTop>
           <Suspense fallback={<Loader />}>
             <Switch>
-              {/* <Route path="/login" component={Login} /> */}
+              <Route path="/login" component={Login} />
               <Route
                 render={(props) =>
-                  // this.props.isUsuarioAutenticado ? (
+                  this.props.isUsuarioAutenticado ? (
                     <AdminLayout {...props} />
-                  // ) : (
-                  //   <Redirect to="/login" />
-                  // )
+                  ) : (
+                    <Redirect to="/login" />
+                  )
                 }
               />
             </Switch>

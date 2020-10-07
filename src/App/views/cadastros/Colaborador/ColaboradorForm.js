@@ -13,7 +13,7 @@ const validationSchema = yup.object({
 
   nome: yup.string().required("Nome é obrigatório"),
   logradouro: yup.string().required("Endereço é obrigatório"),
-  email: yup.string().nullable().email("E-mail inválido"),
+  email: yup.string().required("E-mail é obrigatório").email("E-mail inválido"),
   bairro: yup.string().required("Bairro é obrigatório"),
   codigoMunicipio: yup.number().required("Município é obrigatório"),
   numero: yup.number().typeError("Número é obrigatório").required("Número é obrigatório"),

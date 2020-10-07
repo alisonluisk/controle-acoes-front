@@ -13,5 +13,6 @@ export default class Usuario {
 
         this.senha;
         this.confirmSenha;
+        this.senhaAtual;
     }
 }    

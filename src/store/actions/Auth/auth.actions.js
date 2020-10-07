@@ -11,14 +11,15 @@ export function login(email, password) {
                     dispatch(setUserData(user));
                     return dispatch({
                         type   : USUARIO_AUTENTICADO,
-                        payload: true
+                        usuarioAutenticado: true
                     });
                 }
             )
             .catch(error => {
                 return dispatch({
                     type   : USUARIO_AUTENTICADO,
-                    payload: false
+                    payload: error.response,
+                    usuarioAutenticado: false
                 });
             });
         }
@@ -43,24 +44,4 @@ export function setUserData(user)
             payload: user
         })
     }
-}
-
-export function setEmpresaLogada(usuario, empresa) {
-    return function(dispatch) {
-        return jwtService.setEmpresaLogada(usuario, empresa)
-            .then((user) => {
-                    dispatch(setUserData(user));
-                    return  dispatch({
-                        type: SET_EMPRESA_LOGADA,
-                        payload: empresa
-                    })
-                }
-            )
-            .catch(error => {
-                return dispatch({
-                    type   : SET_EMPRESA_LOGADA,
-                    payload: null
-                });
-            });
-        }
 }

@@ -33,6 +33,10 @@ class UsuarioService extends BaseResourceService {
         return this.update(this.endpoint + `/${usuario.id}/definirSenha`, usuario);
     }
 
+    alterarSenha(usuario){
+        return this.update(this.endpoint + `/${usuario.id}/alterar_senha`, usuario);
+    }
+
 }
 
 const sevice = new UsuarioService();

@@ -37,16 +37,8 @@ class NavRight extends Component {
                     alt="User Profile"
                   />
                   <span>
-                    {usuarioLogado ? usuarioLogado.nome.split(" ")[0] : ""}
+                    {usuarioLogado ? usuarioLogado.nome : ""}
                   </span>
-                  {/* <a
-                    href={DEMO.BLANK_LINK}
-                    onClick={this.logout}
-                    className="dud-logout"
-                    title="Logout"
-                  >
-                    <i className="feather icon-log-out" />
-                  </a> */}
                 </div>
                 <ul className="pro-body">
                   <li>
@@ -55,14 +47,14 @@ class NavRight extends Component {
                     </a>
                   </li>
                   <li>
-                    {/* <a
+                    <a
                       href={DEMO.BLANK_LINK}
                       onClick={this.logout}
                       className="dropdown-item dud-logout"
                       title="Deslogar"
                     >
                       <i className="feather icon-log-out" /> Sair
-                    </a> */}
+                    </a>
                   </li>
                 </ul>
               </Dropdown.Menu>
@@ -77,8 +69,7 @@ class NavRight extends Component {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      logout: AuthActions.logout,
-      setEmpresaLogada: AuthActions.setEmpresaLogada,
+      logout: AuthActions.logout
     },
     dispatch
   );
@@ -86,8 +77,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
-    usuarioLogado: state.auth.usuario,
-    empresaLogada: state.auth.empresaLogada,
+    usuarioLogado: state.auth.usuario
   };
 };
 

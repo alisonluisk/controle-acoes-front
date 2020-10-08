@@ -2,7 +2,7 @@ export default {
     items: [
         {
             id: 'pages',
-            title: 'Pages',
+            title: '',
             type: 'group',
             icon: 'icon-pages',
             children: [

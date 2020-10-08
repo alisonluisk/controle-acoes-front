@@ -19,6 +19,7 @@ const AlterarSenhaForm = (props) => {
     dirty,
     setFieldTouched,
   } = props;
+  const [showPasswordAtual, setShowPasswordAtual] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -35,6 +36,10 @@ const AlterarSenhaForm = (props) => {
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleClickShowPasswordAtual = () => {
+    setShowPasswordAtual(!showPasswordAtual);
   };
 
   const handleClickShowConfirmPassword = () => {
@@ -70,9 +75,35 @@ const AlterarSenhaForm = (props) => {
           </Box>
           <Box width="100%" display="flex" flexDirection="column">
             <Grid container spacing={1}>
-              <Grid item xs={12}>
+            <Grid item xs={12}>
                 <TextField
                   autoFocus
+                  id="senhaAtual"
+                  name="senhaAtual"
+                  helperText={touched.senhaAtual ? errors.senhaAtual : ""}
+                  error={touched.senhaAtual && Boolean(errors.senhaAtual)}
+                  defaultValue={senhaAtual || ""}
+                  onChange={change.bind(null, "senhaAtual")}
+                  onBlur={blur.bind(null, "senhaAtual")}
+                  label="Senha atual"
+                  type={showPasswordAtual ? 'text' : 'password'}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPasswordAtual}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
                   id="senha"
                   name="senha"
                   helperText={touched.senha ? errors.senha : ""}

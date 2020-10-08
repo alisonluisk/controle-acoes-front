@@ -5,6 +5,7 @@ import NavLeft from "./NavLeft";
 import NavRight from "./NavRight";
 import DEMO from "../../../../store/constant";
 import * as actionTypes from "../../../../store/actions/Theme/theme.actions";
+import icone from "src/assets/images/bg-images/ibolsaIcone.png";
 
 class NavBar extends Component {
     render() {
@@ -24,9 +25,11 @@ class NavBar extends Component {
                     <div className="m-header">
                         <a className={toggleClass.join(' ')} id="mobile-collapse1" href={DEMO.BLANK_LINK} onClick={this.props.onToggleNavigation}><span/></a>
                         <a href={DEMO.BLANK_LINK} className="b-brand">
-                            <div className="b-bg">
-                                <i className="feather icon-trending-up"/>
-                            </div>
+                        <img
+                    src={icone}
+                    alt="Bem vindo"
+                    width="50px"
+                />
                             <span className="b-title">iBolsa</span>
                         </a>
                     </div>

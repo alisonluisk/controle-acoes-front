@@ -45,28 +45,12 @@ class UsuarioView extends ViewComponent {
     this.setState({showDefinirSenha: value});
   }
 
-  openCloseModalAlterarSenha = (value) => {
-    this.setState({showAlterarSenha: value});
-  }
-
   openDefinirSenha = (usuario) => {
     this.setState({usuario: Object.assign({}, usuario)});
     this.openCloseModalDefinirSenha(true);
   }
 
   definirSenha = async (usuario) => {
-    usuarioService.definirSenha(usuario).then(data=>{
-      this.buscarAtivados(usuarioService);
-      this.openCloseModalDefinirSenha(false);
-    })
-  }
-
-  openAlterarSenha = (usuario) => {
-    this.setState({usuario: Object.assign({}, usuario)});
-    this.openCloseModalAlterarSenha(true);
-  }
-
-  alterarSenha = async (usuario) => {
     usuarioService.definirSenha(usuario).then(data=>{
       this.buscarAtivados(usuarioService);
       this.openCloseModalDefinirSenha(false);

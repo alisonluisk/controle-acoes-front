@@ -2,12 +2,15 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import CustomModal from "src/App/components/Modals/CustomModal.js";
-import DefinirSenhaForm from "./DefinirSenhaForm";
+import AlterarSenhaForm from "./AlterarSenhaForm";
 
 const validationSchema = yup.object({
   // só valida as senhas se for um cadastro novo, ou seja não possuir um código
   senhaAtual: yup
-  .string("Informe uma senha").required("Informe uma senha"),
+  .string("Informe uma senha")
+    .min(8, "Senha deve conter no mínimo 8 caracteres.")
+    .matches(/[a-zA-Z]/, "Senha deve conter letras e número")
+    .required("Informe uma senha"),
   senha: yup
     .string("Informe uma senha")
     .min(8, "Senha deve conter no mínimo 8 caracteres.")
@@ -45,7 +48,7 @@ const AlterarSenhaModal = (props) => {
           props.salvar(values);
         }}
       >
-        {(props) => <DefinirSenhaForm {...props} />}
+        {(props) => <AlterarSenhaForm {...props} />}
       </Formik>
     </CustomModal>
   );

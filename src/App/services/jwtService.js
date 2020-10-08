@@ -1,5 +1,6 @@
 import axios from 'axios';
 // import jwtDecode from 'jwt-decode';
+import { setUserNull } from 'src/store/actions/Auth/auth.actions.js';
 
 // const API_CONFIG = "http://54.174.116.204/v1";
 const API_CONFIG = "http://localhost:8080/v1";
@@ -79,18 +80,16 @@ class jwtService {
             return Promise.reject(error);
           });
 
-        //   customAxios.interceptors.response.use(response => {
-        //     return response;
-        // }, err => {
-        //     return new Promise((resolve, reject) => {
-        //         console.log(err)
-        //         if ( err.response.status === 403 && err.config && !err.config.__isRetryRequest )
-        //         {
-        //             this.setSession(null);
-        //         }
-        //         throw err;
-        //     });
-        // });
+        customAxios.interceptors.response.use(response => {
+            return response;
+        }, err => {
+            return new Promise((resolve, reject) => {
+                if ( ( err.response.status === 401 || err.response.status === 403 ) && err.config && !err.config.__isRetryRequest ){
+                    this.logout();
+                }
+                throw err;
+            });
+        });
     };
 
     getInterceptor() {

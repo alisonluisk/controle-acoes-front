@@ -21,8 +21,8 @@ import "src/assets/scss/style.scss";
 
 class Login extends React.Component {
   state = {
-    email: "alisonluisk@gmail.com",
-    password: "ale261013",
+    email: "admin@ibolsa.com.br",
+    password: "ibolsa2020",
   };
 
   canBeSubmitted() {

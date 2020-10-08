@@ -31,7 +31,19 @@ export function logout(){
         dispatch(setUserData(null));
         return dispatch({
             type   : USUARIO_AUTENTICADO,
-            payload: false
+            payload: undefined,
+            usuarioAutenticado: false
+        });
+    }
+}
+
+export function setUserNull(){
+    return function(dispatch) {
+        dispatch(setUserData(null));
+        return dispatch({
+            type   : USUARIO_AUTENTICADO,
+            payload: undefined,
+            usuarioAutenticado: false
         });
     }
 }

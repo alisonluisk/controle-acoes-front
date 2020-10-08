@@ -4,18 +4,38 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import * as AuthActions from "src/store/actions/Auth/auth.actions";
-
+import usuarioService from "src/App/services/Usuario/UsuarioService.js";
 import DEMO from "src/store/constant";
 import AvatarDefault from "src/assets/images/user/avatar-2.jpg";
+import AlterarSenhaModal from "src/App/views/cadastros/Usuario/dialogs/AlterarSenhaModal";
 
 class NavRight extends Component {
+  state = {
+    showAlterarSenha: false
+  };
+
   logout = (e) => {
     e.preventDefault();
     this.props.logout();
   };
 
+  openCloseModalAlterarSenha = (value) => {
+    this.setState({showAlterarSenha: value});
+  }
+
+  openAlterarSenha = () => {
+    this.openCloseModalAlterarSenha(true);
+  }
+
+  alterarSenha = async (dados) => {
+    usuarioService.alterarSenha(dados).then(data=>{
+      this.openCloseModalAlterarSenha(false);
+    })
+  }
+
   render() {
     const usuarioLogado = this.props.usuarioLogado;
+    const showAlterarSenha = this.state.showAlterarSenha;
     
     return (
       <React.Fragment>
@@ -42,8 +62,8 @@ class NavRight extends Component {
                 </div>
                 <ul className="pro-body">
                   <li>
-                    <a href={DEMO.BLANK_LINK} className="dropdown-item">
-                      <i className="feather icon-settings" /> Meu perfil
+                    <a href={DEMO.BLANK_LINK} className="dropdown-item" onClick={this.openAlterarSenha}>
+                      <i className="feather icon-lock" /> Redefinir senha
                     </a>
                   </li>
                   <li>
@@ -61,6 +81,12 @@ class NavRight extends Component {
             </Dropdown>
           </li>
         </ul>
+        <AlterarSenhaModal
+          usuario={usuarioLogado}
+          showModal={showAlterarSenha} 
+          closeModal={(e) =>this.openCloseModalAlterarSenha(false)}
+          salvar={this.alterarSenha}
+        />
       </React.Fragment>
     );
   }

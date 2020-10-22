@@ -52,6 +52,14 @@ export default {
                             classes: 'nav-item',
                             icon: 'feather icon-sidebar'
                         },
+                        {
+                            id: 'modelos_contrato',
+                            title: 'Modelos de contrato',
+                            type: 'item',
+                            url: '/cadastros/modelos_contrato',
+                            classes: 'nav-item',
+                            icon: 'feather icon-sidebar'
+                        },
                     ]
                 },
             ]

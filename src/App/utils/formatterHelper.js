@@ -144,3 +144,20 @@ export function maskContaIBolsa(text){
         return undefined;
     return text.toString().padStart(7, '0');
 }
+
+export function maskVersao(text){
+    if(!text)
+        return undefined;
+    return text.toFixed(1);
+}
+
+export function maskTipoContrato(tipo){
+    if(tipo === "FLEX") return "Flex";
+    if(tipo === "PRIME") return "Prime";
+    if(tipo === "LYS_MONEY") return "Lys Money";
+}
+
+export function maskFormaPagamento(forma){
+    if(forma === "AVISTA") return "À Vista";
+    if(forma === "AGUARDANDO") return "À Integralizar";
+}

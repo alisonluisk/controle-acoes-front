@@ -17,6 +17,9 @@ const AcionistaFormPage = React.lazy(() => import('./App/views/cadastros/Acionis
 
 const UsuarioPage = React.lazy(() => import('./App/views/cadastros/Usuario/UsuarioView'));
 
+const ModeloContratoPage = React.lazy(() => import('./App/views/cadastros/ModeloContrato/ModeloContratoView'));
+const ModeloContratoFormPage = React.lazy(() => import('./App/views/cadastros/ModeloContrato/ModeloContratoForm'));
+
 const routes = [
     { path: '/cadastros/empresas', exact: true, name: 'Empresas', component: EmpresaPage },
     { path: '/cadastros/empresas/:id', exact: false, name: 'Empresa Form', component: EmpresaFormPage },
@@ -26,6 +29,8 @@ const routes = [
     { path: '/cadastros/acionistas', exact: true, name: 'Acionistas', component: AcionistaPage },
     { path: '/cadastros/acionistas/:id', exact: false, name: 'Acionistas Form', component: AcionistaFormPage },
     { path: '/cadastros/usuarios', exact: true, name: 'Usuários', component: UsuarioPage },
+    { path: '/cadastros/modelos_contrato', exact: true, name: 'Modelo contrato', component: ModeloContratoPage },
+    { path: '/cadastros/modelos_contrato/:id', exact: false, name: 'Modelo contrato Form', component: ModeloContratoFormPage },
 ];
 
 export default routes;

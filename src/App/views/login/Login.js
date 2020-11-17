@@ -38,7 +38,7 @@ class Login extends React.Component {
         if (e.usuarioAutenticado) {
           this.props.history.push(config.defaultPath);
         } else {
-          if (e.payload.data.message === "Bad credentials")
+          if (e.payload.data.error_description === "Bad credentials")
             messageService.errorMessage(
               "Não autorizado!",
               "Verifique senha e email."

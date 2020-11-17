@@ -28,7 +28,7 @@ const AcionistaList = (props) => {
     {
       id: 'nome',
       label: 'Nome',
-      width: '39%',
+      width: '34%',
       sort: true,
       filter: true,
       disablePadding: false,
@@ -58,7 +58,7 @@ const AcionistaList = (props) => {
     {
       id: 'acoes',
       label: 'Ações',
-      width: '10%',
+      width: '15%',
       sort: false,
       filter: false,
       disablePadding: false,

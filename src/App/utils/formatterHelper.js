@@ -161,3 +161,28 @@ export function maskFormaPagamento(forma){
     if(forma === "AVISTA") return "À Vista";
     if(forma === "AGUARDANDO") return "À Integralizar";
 }
+
+
+export function maskNumericValue(text, withSymbol){
+    if(text === undefined || text === null)
+        return;
+    var value = (new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+    }).format((+text.toString()).toFixed(2)));
+    return withSymbol ? value : value.replace('R$', '').trim();
+}
+
+export function round(num, places) {
+	if (!("" + num).includes("e")) {
+		return +(Math.round(num + "e+" + places)  + "e-" + places);
+	} else {
+		let arr = ("" + num).split("e");
+		let sig = ""
+		if (+arr[1] + places > 0) {
+			sig = "+";
+		}
+
+		return +(Math.round(+arr[0] + "e" + sig + (+arr[1] + places)) + "e-" + places);
+	}
+}

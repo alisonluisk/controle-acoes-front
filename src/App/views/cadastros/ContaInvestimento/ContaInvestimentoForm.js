@@ -6,83 +6,85 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import { maskIntegerValue, maskCurrency, numberToCurrency, maskNumericValue, round } from "src/App/utils/formatterHelper";
 import messageService from "src/App/services/MessageService.js";
-import { MenuItem, Typography } from "@material-ui/core";
+import { FormControlLabel, MenuItem, Switch, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import AcionistaAutoComplete from "src/App/components/Autocomplete/AcionistaAutoComplete";
 import EmpresaAutoComplete from "src/App/components/Autocomplete/EmpresaAutoComplete";
 import FormikComponent from "src/App/components/Views/FormikComponent";
 
 class ContaInvestimentoForm extends FormikComponent {
-  // const ContaInvestimentoForm = (props) => {
 
+  calcularValoresConta = (qtdLotes, valorAcao, parcelas) => {
+    if (!isNaN(qtdLotes) && !isNaN(valorAcao)) {
+      let qtdAcoes = qtdLotes * 5000;
+      let total = qtdAcoes * valorAcao;
+      let percentual = qtdLotes * 0.20;
+      this.props.setFieldValue("qtdAcoes", qtdAcoes, true);
+      this.props.setFieldValue("participacao", round(percentual, 2), true);
+      this.props.setFieldValue("aporteTotal", total, true);
+      this.calcularParcelas(parcelas, total);
+    }
+  }
 
-  // function handleChange(name, event) {
-  //   event.persist();
-  //   let valor = numberToCurrency(event.target.value);
-  //   setFieldValue(name, valor, true);
-  //   setFieldTouched(name, true, false);
-  // };
+  calcularParcelas = (qtdParcelas, valorTotalAplicacao) => {
+    if (!isNaN(qtdParcelas) && !isNaN(valorTotalAplicacao)) {
+      let valorParcela = round((valorTotalAplicacao / qtdParcelas), 2);
+      this.props.setFieldValue("aporteMensal", valorParcela, true);
+    }
+  }
 
-  // const blur = (name, e) => {
-  //   setFieldTouched(name, true, true);
-  // };
-
-  // const adicionarEmpresa = (parametro) =>{
-  //   parametroAcoes.push(parametro);
-  //   setFieldValue("parametroAcoes", parametroAcoes);
-  // }
-
-  // const removerEmpresa = (parametro) =>{
-  //   parametroAcoes.splice(parametroAcoes.indexOf(parametro), 1);
-  //   setFieldValue("parametroAcoes", parametroAcoes);
-  // }
-
-  // const salvar = () => {
-  //   if(parametroAcoes.reduce((total, param) => total + param.cotasOn, 0) !== 100 ||
-  //       parametroAcoes.reduce((total, param) => total + param.cotasPn, 0) !== 100){
-  //     messageService.errorMessage("Erro", "Percentual ON e PN deve ser igual a 100%")
-  //     return;
-  //   }
-  //   handleSubmit();
-  // }
-
+  calcularAdesao = (qtdParcelas, valorAdesao) => {
+    if (!isNaN(qtdParcelas) && !isNaN(valorAdesao)) {
+      let valorParcela = round((valorAdesao / qtdParcelas), 2);
+      this.props.setFieldValue("valorParcelaAdesao", valorParcela, true);
+    }else{
+      this.props.setFieldValue("valorParcelaAdesao", 0, true);
+    }
+  }
 
   render() {
     const {
-      values: { tipoContrato, formaPagamento, qtdAcoes, participacao, valorTotalAplicacao, valorAdesao, qtdParcelas, empresa, cotasOn, cotasPn, qtdLotes, valorAcao, acionista, parametroAcoes },
+      values: { tipoContrato, integralizacao, qtdAcoes, participacao, aporteTotal, valorAdesao, parcelas, aporteMensal, parcelaAdesao, qtdLotes, valorAcao, valorParcelaAdesao, observacoes, possuiLinhaCredito, conta },
       errors,
       touched,
       handleSubmit,
       isSubmitting,
       isValid,
-      setFieldTouched,
       setFieldValue,
     } = this.props;
 
     const handleChangeQtdLotes = (name, event) => {
       this.changeNumber(name, event);
       let qtd = Number(event.target.value);
-      console.log('qtd', qtd)
-      console.log(isNaN(qtd))
-      if (!isNaN(qtd) && qtd > 0) {
-        let qtdAcoes = qtd * 5000;
-        let percentual = qtd * 0.20;
-        setFieldValue("qtdAcoes", qtdAcoes, true);
-        setFieldValue("participacao", round(percentual, 2), true);
-        // 2525000
-      }
+      this.calcularValoresConta(qtd, valorAcao, parcelas);
     };
 
-    function handleChangeValor(name, event) {
+    const handleChangeValor = (name, event) => {
       let valor = numberToCurrency(event.target.value);
       setFieldValue(name, valor, true);
-      // let valorAplicacao = valor * qtdAcoes;
-      // setFieldValue("valorTotalAplicacao", valorAplicacao, true);
+      this.calcularValoresConta(qtdLotes, valor, parcelas);
     }
 
-    // const onBlur = (name, e) => {
-    //   setFieldTouched(name, true, true);
-    // };
+    const handleChangeQtdParcela = (event) => {
+      this.changeNumber("parcelas", event);
+      let qtd = Number(event.target.value);
+      this.calcularParcelas(qtd, aporteTotal);
+    }
+
+    const handleChangeValorAdesao = (name, event) => {
+      let valor = numberToCurrency(event.target.value);
+      setFieldValue(name, valor, true);
+      if(isNaN(valor) || valor == 0)
+          setFieldValue("parcelaAdesao", undefined, false); 
+      
+      this.calcularAdesao(parcelaAdesao, valor);
+    }
+
+    const handleChangeQtdParcelaAdesao = (name, event) => {
+      this.changeNumber(name, event);
+      let qtd = Number(event.target.value);
+      this.calcularAdesao(qtd, valorAdesao);
+    }
 
     return (
       <React.Fragment>
@@ -98,11 +100,11 @@ class ContaInvestimentoForm extends FormikComponent {
                 </Grid>
                 <Grid item xs={12} sm={2}>
                   <TextField
-                    id="codigo"
-                    name="codigo"
+                    id="conta"
+                    name="conta"
                     disabled={true}
-                    value={"000001"}
-                    label="Código"
+                    value={conta || ""}
+                    label="Conta"
                     fullWidth
                   />
                 </Grid>
@@ -141,17 +143,17 @@ class ContaInvestimentoForm extends FormikComponent {
                 <Grid item xs={12} sm={6} md={3}>
                   <TextField
                     select
-                    id="formaPagamento"
-                    name="formaPagamento"
+                    id="integralizacao"
+                    name="integralizacao"
                     helperText={
-                      touched.formaPagamento ? errors.formaPagamento : ""
+                      touched.integralizacao ? errors.integralizacao : ""
                     }
                     error={
-                      touched.formaPagamento && Boolean(errors.formaPagamento)
+                      touched.integralizacao && Boolean(errors.integralizacao)
                     }
-                    value={formaPagamento || "FLEX"}
-                    onBlur={this.blur.bind(null, "formaPagamento")}
-                    onChange={this.change.bind(null, "formaPagamento")}
+                    value={integralizacao || "FLEX"}
+                    onBlur={this.blur.bind(null, "integralizacao")}
+                    onChange={this.change.bind(null, "integralizacao")}
                     label="Forma de pagamento"
                     fullWidth
                   >
@@ -190,7 +192,6 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="participacao"
                     name="participacao"
-                    // disabled={true}
                     value={maskNumericValue(participacao, false) || ""}
                     label="Participação"
                     InputProps={{
@@ -207,36 +208,37 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="valorAcao"
                     name="valorAcao"
+                    helperText={touched.valorAcao ? errors.valorAcao : ""}
+                    error={touched.valorAcao && Boolean(errors.valorAcao)}
                     value={maskCurrency(Number(valorAcao).toFixed(2)) || ''}
                     onChange={(e) => {
                       handleChangeValor("valorAcao", e);
                     }}
+                    onBlur={this.blur.bind(null, "valorAcao")}
                     label="Valor da Ação"
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <TextField
-                    id="valorTotalAplicacao"
-                    name="valorTotalAplicacao"
-                    // disabled={true}
-                    // value={"R$ 5.000,00"}
-                    value={maskCurrency(Number(valorTotalAplicacao).toFixed(2)) || ''}
+                    id="aporteTotal"
+                    name="aporteTotal"
+                    value={maskCurrency(Number(aporteTotal).toFixed(2)) || ''}
                     label="Valor Total da Aplicação"
                     fullWidth
                   />
                 </Grid>
-                {formaPagamento === "AINTEGRALIZAR" &&
+                {integralizacao === "AINTEGRALIZAR" &&
                   <React.Fragment>
                     <Grid item xs={12} sm={6} md={3}>
                       <TextField
-                        id="qtdParcelas"
-                        name="qtdParcelas"
-                        helperText={touched.qtdParcelas ? errors.qtdParcelas : ""}
-                        error={touched.qtdParcelas && Boolean(errors.qtdParcelas)}
-                        value={qtdParcelas || ""}
-                        onBlur={this.blur.bind(null, "qtdParcelas")}
-                        onChange={this.changeNumber.bind(null, "qtdParcelas")}
+                        id="parcelas"
+                        name="parcelas"
+                        helperText={touched.parcelas ? errors.parcelas : ""}
+                        error={touched.parcelas && Boolean(errors.parcelas)}
+                        value={parcelas || ""}
+                        onBlur={this.blur.bind(null, "parcelas")}
+                        onChange={(e) => handleChangeQtdParcela(e)}
                         label="Qtd. Parcelas"
                         fullWidth
                       />
@@ -245,8 +247,7 @@ class ContaInvestimentoForm extends FormikComponent {
                       <TextField
                         id="aporteMensal"
                         name="aporteMensal"
-                        disabled={true}
-                        value={"R$ 136,89"}
+                        value={maskCurrency(Number(aporteMensal).toFixed(2)) || ''}
                         label="Aporte mensal"
                         fullWidth
                       />
@@ -258,14 +259,13 @@ class ContaInvestimentoForm extends FormikComponent {
                 Informações de adesão
             </Typography>
               <Grid container spacing={1}>
-
                 <Grid item xs={12} sm={6} md={3}>
                   <TextField
                     id="valorAdesao"
                     name="valorAdesao"
                     value={maskCurrency(Number(valorAdesao).toFixed(2)) || ''}
                     onChange={(e) => {
-                      handleChangeValor("valorAdesao", e);
+                      handleChangeValorAdesao("valorAdesao", e);
                     }}
                     label="Valor Adesão"
                     fullWidth
@@ -273,10 +273,14 @@ class ContaInvestimentoForm extends FormikComponent {
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <TextField
-                    id="qtdParcelasAdesao"
-                    name="qtdParcelasAdesao"
-                    disabled={true}
-                    value={"5"}
+                    id="parcelaAdesao"
+                    name="parcelaAdesao"
+                    helperText={touched.parcelaAdesao ? errors.parcelaAdesao : ""}
+                    error={touched.parcelaAdesao && Boolean(errors.parcelaAdesao)}
+                    value={parcelaAdesao || ""}
+                    disabled={valorAdesao == 0}
+                    onBlur={this.blur.bind(null, "parcelaAdesao")}
+                    onChange={(e) => handleChangeQtdParcelaAdesao("parcelaAdesao", e)}
                     label="Qtd. Parc. Adesão"
                     fullWidth
                   />
@@ -285,12 +289,24 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="valorParcelaAdesao"
                     name="valorParcelaAdesao"
-                    disabled={true}
-                    value={"R$ 70,00"}
+                    value={maskCurrency(Number(valorParcelaAdesao).toFixed(2)) || ''}
                     label="Valor Parcela Adesão"
                     fullWidth
                   />
                 </Grid>
+                <Grid item xs={12} sm={6} md={3} >
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={possuiLinhaCredito}
+                      onChange={this.change.bind(null, "possuiLinhaCredito")}
+                      name="possuiLinhaCredito"
+                      color="primary"
+                    />
+                  }
+                  label="Possui linha de crédito?"
+                />
+              </Grid>
               </Grid>
               <Typography variant="overline" display="block" gutterBottom>
                 Observações
@@ -300,7 +316,9 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="observacoes"
                     name="observacoes"
-                    value={""}
+                    onBlur={this.blur.bind(null, "observacoes")}
+                    onChange={this.change.bind(null, "observacoes")}
+                    value={observacoes || ""}
                     fullWidth
                     multiline
                     rows={2}
@@ -314,7 +332,7 @@ class ContaInvestimentoForm extends FormikComponent {
           <button
             disabled={!isValid || isSubmitting}
             type="submit"
-            // onClick={salvar}
+            onClick={handleSubmit}
             className="btn btn-theme2 md-close"
           >
             Gerar conta

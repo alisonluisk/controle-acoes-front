@@ -99,7 +99,7 @@ class AcionistaView extends ViewPaginadaComponent {
           contaInvestimento={new ContaInvestimento({"acionista": acionista})}
           showModal={showModalContaInvestimento} 
           closeModal={(e) => this.setState({acionista: undefined, showModalContaInvestimento: false})}
-          salvar={this.salvarParametroEmpresa}/>
+          />
       </React.Fragment>
     );
   }

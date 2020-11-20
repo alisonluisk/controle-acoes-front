@@ -8,6 +8,7 @@ import acionistaService from "src/App/services/Acionista/AcionistaService.js";
 import AcionistaFormInfGerais from './AcionistaFormInfGerais';
 import { validarCPF, validarCpfCnpj } from "src/App/utils/validatorHelper";
 import Acionista from "src/App/models/Acionista/Acionista";
+import ContaInvestimentoList from "src/App/views/cadastros/Acionista/components/ContaInvestimentoList"
 
 const validationSchema = yup.object({
   cpfCnpj: yup.string().required("CPF/CNPJ é obrigatório").test('CPF/CNPJ is Valid', 'CPF/CNPJ é invalido',  value=> validarCpfCnpj(value)),
@@ -80,6 +81,11 @@ class AcionistaForm extends FormComponent {
                     <Tab eventKey="inf-gerais" title={`Informações gerais`}>
                       <AcionistaFormInfGerais {...props}/>
                     </Tab>
+                    {this.state.idx !== "Novo" && 
+                      <Tab eventKey="inf-contas" title={`Contas de investimento`}>
+                        <ContaInvestimentoList {...props}/>
+                      </Tab>
+                    }
                   </Tabs>
                 </Col>
               </Row>

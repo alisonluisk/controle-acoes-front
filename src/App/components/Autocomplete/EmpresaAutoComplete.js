@@ -11,7 +11,7 @@ class EmpresaAutoComplete extends Component {
 
   componentDidMount() {
     empresaService
-      .getAllByParams([])
+      .getAllEmpresasAcoes()
       .then((data) => {
         this.setState({ empresas: data });
         if(data[0]){

@@ -24,12 +24,6 @@ const validationSchema = yup.object({
 
 class ContaInvestimentoModal extends Component {
 
-  salvarModel = (service, model) => {
-    return new Promise((resolve, reject) => {
-      
-    });
-  }
-
   salvar = async(conta) => {
     contaInvestimentoService.salvar(conta).then((data) => {
         messageService.successMessage("Sucesso", "Conta de investimento gerada com sucesso!");
@@ -50,7 +44,7 @@ class ContaInvestimentoModal extends Component {
     return (
       <CustomModal
         animation="fadeIn"
-        title="Cadastro de conta de investimento"
+        title={contaInvestimento && contaInvestimento.id != null ? 'Conta de investimento' : 'Cadastro de conta de investimento'}
         open={this.props.showModal}
         width="1000px"
         height="500px"

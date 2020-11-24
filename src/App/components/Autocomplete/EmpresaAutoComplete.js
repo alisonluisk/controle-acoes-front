@@ -65,6 +65,7 @@ class EmpresaAutoComplete extends Component {
                   {...params}
                   name="codigoEmpresa"
                   id="codigoEmpresa"
+                  disabled={this.props.disabled}
                   helperText={touched.codigoEmpresa ? errors.codigoEmpresa : ""}
                   error={touched.codigoEmpresa && Boolean(errors.codigoEmpresa)}
                   label="Empresa"

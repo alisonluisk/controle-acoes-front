@@ -1,11 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import { Card } from "react-bootstrap";
 import TextField from "src/App/components/TextFields/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import { maskIntegerValue, maskCurrency, numberToCurrency, maskNumericValue, round } from "src/App/utils/formatterHelper";
-import messageService from "src/App/services/MessageService.js";
+import { maskContaIBolsa, maskCurrency, numberToCurrency, maskNumericValue, round } from "src/App/utils/formatterHelper";
 import { FormControlLabel, MenuItem, Switch, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import AcionistaAutoComplete from "src/App/components/Autocomplete/AcionistaAutoComplete";
@@ -44,7 +43,7 @@ class ContaInvestimentoForm extends FormikComponent {
 
   render() {
     const {
-      values: { tipoContrato, integralizacao, qtdAcoes, participacao, aporteTotal, valorAdesao, parcelas, aporteMensal, parcelaAdesao, qtdLotes, valorAcao, valorParcelaAdesao, observacoes, possuiLinhaCredito, conta },
+      values: { id, tipoContrato, integralizacao, qtdAcoes, participacao, aporteTotal, valorAdesao, parcelas, aporteMensal, parcelaAdesao, qtdLotes, valorAcao, valorParcelaAdesao, observacoes, possuiLinhaCredito, conta },
       errors,
       touched,
       handleSubmit,
@@ -96,14 +95,14 @@ class ContaInvestimentoForm extends FormikComponent {
                   <AcionistaAutoComplete {...this.props} />
                 </Grid>
                 <Grid item xs={12} sm={5}>
-                  <EmpresaAutoComplete {...this.props} />
+                  <EmpresaAutoComplete disabled={id != null} {...this.props} />
                 </Grid>
                 <Grid item xs={12} sm={2}>
                   <TextField
                     id="conta"
                     name="conta"
                     disabled={true}
-                    value={conta || ""}
+                    value={maskContaIBolsa(conta) || ""}
                     label="Conta"
                     fullWidth
                   />
@@ -124,6 +123,7 @@ class ContaInvestimentoForm extends FormikComponent {
                     helperText={touched.tipoContrato ? errors.tipoContrato : ""}
                     error={touched.tipoContrato && Boolean(errors.tipoContrato)}
                     value={tipoContrato || "FLEX"}
+                    disabled={id != null}
                     onBlur={this.blur.bind(null, "tipoContrato")}
                     onChange={this.change.bind(null, "tipoContrato")}
                     label="Tipo contrato"
@@ -152,6 +152,7 @@ class ContaInvestimentoForm extends FormikComponent {
                       touched.integralizacao && Boolean(errors.integralizacao)
                     }
                     value={integralizacao || "FLEX"}
+                    disabled={id != null}
                     onBlur={this.blur.bind(null, "integralizacao")}
                     onChange={this.change.bind(null, "integralizacao")}
                     label="Forma de pagamento"
@@ -169,6 +170,7 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="qtdLotes"
                     name="qtdLotes"
+                    disabled={id != null}
                     helperText={touched.qtdLotes ? errors.qtdLotes : ""}
                     error={touched.qtdLotes && Boolean(errors.qtdLotes)}
                     value={qtdLotes || ""}
@@ -182,7 +184,7 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="qtdAcoes"
                     name="qtdAcoes"
-                    // disabled={true}
+                    disabled={id != null}
                     value={qtdAcoes || ""}
                     label="Qtd. Ações"
                     fullWidth
@@ -192,6 +194,7 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="participacao"
                     name="participacao"
+                    disabled={id != null}
                     value={maskNumericValue(participacao, false) || ""}
                     label="Participação"
                     InputProps={{
@@ -215,6 +218,7 @@ class ContaInvestimentoForm extends FormikComponent {
                       handleChangeValor("valorAcao", e);
                     }}
                     onBlur={this.blur.bind(null, "valorAcao")}
+                    disabled={id != null}
                     label="Valor da Ação"
                     fullWidth
                   />
@@ -222,6 +226,7 @@ class ContaInvestimentoForm extends FormikComponent {
                 <Grid item xs={12} sm={6} md={3}>
                   <TextField
                     id="aporteTotal"
+                    disabled={id != null}
                     name="aporteTotal"
                     value={maskCurrency(Number(aporteTotal).toFixed(2)) || ''}
                     label="Valor Total da Aplicação"
@@ -238,6 +243,7 @@ class ContaInvestimentoForm extends FormikComponent {
                         error={touched.parcelas && Boolean(errors.parcelas)}
                         value={parcelas || ""}
                         onBlur={this.blur.bind(null, "parcelas")}
+                        disabled={id != null}
                         onChange={(e) => handleChangeQtdParcela(e)}
                         label="Qtd. Parcelas"
                         fullWidth
@@ -247,6 +253,7 @@ class ContaInvestimentoForm extends FormikComponent {
                       <TextField
                         id="aporteMensal"
                         name="aporteMensal"
+                        disabled={id != null}
                         value={maskCurrency(Number(aporteMensal).toFixed(2)) || ''}
                         label="Aporte mensal"
                         fullWidth
@@ -263,6 +270,7 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="valorAdesao"
                     name="valorAdesao"
+                    disabled={id != null}
                     value={maskCurrency(Number(valorAdesao).toFixed(2)) || ''}
                     onChange={(e) => {
                       handleChangeValorAdesao("valorAdesao", e);
@@ -278,7 +286,7 @@ class ContaInvestimentoForm extends FormikComponent {
                     helperText={touched.parcelaAdesao ? errors.parcelaAdesao : ""}
                     error={touched.parcelaAdesao && Boolean(errors.parcelaAdesao)}
                     value={parcelaAdesao || ""}
-                    disabled={valorAdesao == 0}
+                    disabled={valorAdesao == 0 || id != null}
                     onBlur={this.blur.bind(null, "parcelaAdesao")}
                     onChange={(e) => handleChangeQtdParcelaAdesao("parcelaAdesao", e)}
                     label="Qtd. Parc. Adesão"
@@ -289,6 +297,7 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="valorParcelaAdesao"
                     name="valorParcelaAdesao"
+                    disabled={id != null}
                     value={maskCurrency(Number(valorParcelaAdesao).toFixed(2)) || ''}
                     label="Valor Parcela Adesão"
                     fullWidth
@@ -299,6 +308,7 @@ class ContaInvestimentoForm extends FormikComponent {
                   control={
                     <Switch
                       checked={possuiLinhaCredito}
+                      disabled={id != null}
                       onChange={this.change.bind(null, "possuiLinhaCredito")}
                       name="possuiLinhaCredito"
                       color="primary"
@@ -316,6 +326,7 @@ class ContaInvestimentoForm extends FormikComponent {
                   <TextField
                     id="observacoes"
                     name="observacoes"
+                    disabled={id != null}
                     onBlur={this.blur.bind(null, "observacoes")}
                     onChange={this.change.bind(null, "observacoes")}
                     value={observacoes || ""}
@@ -328,7 +339,9 @@ class ContaInvestimentoForm extends FormikComponent {
             </Box>
           </form>
         </Card.Body>
+        
         <Card.Footer className="text-right p-10">
+         {id == null && 
           <button
             disabled={!isValid || isSubmitting}
             type="submit"
@@ -337,6 +350,7 @@ class ContaInvestimentoForm extends FormikComponent {
           >
             Gerar conta
         </button>
+      }
         </Card.Footer>
       </React.Fragment>
     );

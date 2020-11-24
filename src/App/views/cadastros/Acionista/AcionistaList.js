@@ -6,16 +6,6 @@ const AcionistaList = (props) => {
   
   const columns = [
     {
-      id: 'conta',
-      label: 'Conta',
-      width: '10%',
-      sort: true,
-      filter: true,
-      disablePadding: false,
-      align: 'left',
-      mask: maskContaIBolsa
-    },
-    {
       id: 'cpfCnpj',
       label: 'CPF/CNPJ',
       width: '15%',

@@ -8,6 +8,7 @@ import ContaInvestimentoModal from "../ContaInvestimento/ContaInvestimentoModal.
 import { IconButton } from "@material-ui/core";
 import ContaInvestimento from "src/App/models/ContaInvestimento/ContaInvestimento";
 
+
 class AcionistaView extends ViewPaginadaComponent {
 
   state = {
@@ -46,7 +47,6 @@ class AcionistaView extends ViewPaginadaComponent {
 
   cadastrarContaInvestimento = (acionista) => {
     this.setState({acionista: Object.assign({}, acionista), showModalContaInvestimento: true});
-
   }
 
   handleChangeTab = (value) => {

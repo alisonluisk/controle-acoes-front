@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export default function dateToString(date) {
     let format = date.split('-');
     format = `${format[2]}/${format[1]}/${format[0]}`
@@ -18,6 +20,11 @@ export function maskCep(text){
     text=text.replace(/\D/g,"");                      //Remove tudo o que não é dígito
     text=text.replace(/^(\d{5})(\d)/,"$1-$2");       //Esse é tão fácil que não merece explicações
     return text;
+}
+
+export function stringToDateDataVenda(value){
+    let data = moment(value);
+    return data.isValid() ? data.format("DD/MM/YYYY HH:mm") : value;
 }
 
 export function maskCpf(text){
@@ -159,7 +166,7 @@ export function maskTipoContrato(tipo){
 
 export function maskFormaPagamento(forma){
     if(forma === "AVISTA") return "À Vista";
-    if(forma === "AGUARDANDO") return "À Integralizar";
+    if(forma === "AINTEGRALIZAR") return "À Integralizar";
 }
 
 
@@ -170,7 +177,7 @@ export function maskNumericValue(text, withSymbol){
           style: 'currency',
           currency: 'BRL'
     }).format((+text.toString()).toFixed(2)));
-    return withSymbol ? value : value.replace('R$', '').trim();
+    return withSymbol || true ? value : value.replace('R$', '').trim();
 }
 
 export function round(num, places) {

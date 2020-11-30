@@ -412,6 +412,7 @@ class EmpresaFormInfGerais extends FormikComponent {
               {...this.props}
               blur={this.blur}
               change={this.change}
+              changeNumber={this.changeNumber}
             />
           </Box>
         </Card.Body>

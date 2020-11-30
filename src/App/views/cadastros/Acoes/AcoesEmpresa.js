@@ -117,7 +117,7 @@ class AcoesEmpresa extends Component {
             <TextField
               id="cotasOnParametro"
               name="cotasOnParametro"
-              type="number"
+              // type="number"
               disabled
               value={parametro ? parametro.cotasOn : ''}
               label="Cotas ON"
@@ -144,7 +144,7 @@ class AcoesEmpresa extends Component {
               label="Cotas PN"
               title="Percentual de cotas PN  a serem geradas"
               fullWidth
-              type="number"
+              // type="number"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="start">%</InputAdornment>

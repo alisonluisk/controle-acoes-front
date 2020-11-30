@@ -20,7 +20,7 @@ class FormComponent extends Component {
             messageService.errorMessage(error.data.error, error.data.errors[0].message);
           else messageService.errorMessage(error.data.error, error.data.message);
           
-          reject(error);
+          // reject(error);
         }
       });
     });

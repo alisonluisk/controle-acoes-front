@@ -7,6 +7,14 @@ export default {
             icon: 'icon-pages',
             children: [
                 {
+                    id: 'dashboard',
+                    title: 'Dashboard',
+                    type: 'item',
+                    url: '/',
+                    classes: 'nav-item',
+                    icon: 'feather icon-sidebar'
+                },
+                {
                     id: 'menu-level',
                     title: 'Cadastros',
                     type: 'collapse',

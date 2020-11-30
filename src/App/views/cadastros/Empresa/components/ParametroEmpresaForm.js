@@ -19,10 +19,9 @@ const ParametroEmpresaForm = (props) => {
     setFieldTouched,
     setFieldValue,
   } = props;
-
+  console.log(cotasOn);
   const change = (name, e) => {
-    e.persist();
-    handleChange(e);
+    setFieldValue(name, e.target.value.replace(/\D/g, ''), true);
     setFieldTouched(name, true, false);
   };
 
@@ -63,7 +62,7 @@ const ParametroEmpresaForm = (props) => {
                 <TextField
                   id="cotasOn"
                   name="cotasOn"
-                  type="number"
+                  // type="number"
                   helperText={touched.cotasOn ? errors.cotasOn : ""}
                   error={touched.cotasOn && Boolean(errors.cotasOn)}
                   value={cotasOn || ""}
@@ -97,7 +96,7 @@ const ParametroEmpresaForm = (props) => {
                   label="Cotas PN"
                   title="Percentual de cotas PN"
                   fullWidth
-                  type="number"
+                  // type="number"
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="start">%</InputAdornment>

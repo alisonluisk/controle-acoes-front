@@ -5,8 +5,8 @@ import ParametroEmpresaForm from './ParametroEmpresaForm.js'
 import CustomModal from "src/App/components/Modals/CustomModal.js"
 
 const validationSchema = yup.object({
-  cotasOn: yup.number().required("Cotas On é obrigatória"),
-  cotasPn: yup.number().required("Cotas Pn é obrigatória")});
+  cotasOn: yup.number().required("Cotas On é obrigatória").moreThan(0, "Deve ser maior que zero"),
+  cotasPn: yup.number().required("Cotas Pn é obrigatória").moreThan(0, "Deve ser maior que zero")});
 
 const ParametroEmpresaModal = (props) => {
   const {parametroEmpresa, empresa } = props;

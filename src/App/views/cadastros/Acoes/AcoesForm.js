@@ -82,7 +82,7 @@ const AcoesForm = (props) => {
                 <TextField
                   id="cotasOn"
                   name="cotasOn"
-                  type="number"
+                  // type="number"
                   disabled
                   helperText={touched.cotasOn ? errors.cotasOn : ""}
                   error={touched.cotasOn && Boolean(errors.cotasOn)}
@@ -110,7 +110,7 @@ const AcoesForm = (props) => {
                   label="Cotas PN"
                   title="Percentual de cotas PN  a serem geradas"
                   fullWidth
-                  type="number"
+                  // type="number"
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="start">%</InputAdornment>
@@ -131,7 +131,7 @@ const AcoesForm = (props) => {
                   label="Qtd. lotes"
                   title="Quantidade de lotes a serem gerados"
                   fullWidth
-                  type="number"
+                  // type="number"
                   InputProps={{
                     min: "0",
                     max: "100",

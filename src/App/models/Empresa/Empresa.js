@@ -22,5 +22,6 @@ export default class Empresa {
         this.codigoMatriz = obj['codigoMatriz'];
         this.ativo = obj['ativo'];
         this.statusAcoes = obj['statusAcoes'];
+        this.codigoFarmacia = obj['codigoFarmacia'];
     }
 }

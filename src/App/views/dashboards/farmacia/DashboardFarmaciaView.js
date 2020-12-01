@@ -1,12 +1,10 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Typography } from "@material-ui/core";
 import React, { Component } from "react";
-// import { Row, Col, Tabs, Tab } from "react-bootstrap";
-import { Row, Col, Card, Table, Tab, Nav } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withStyles } from "@material-ui/styles";
 import dashboardService from "src/App/services/Dashboard/DashboardFarmaciaService"
 import messageService from "src/App/services/MessageService.js";
-// import { enableRipple } from "@syncfusion/ej2-base";
 import { Chart } from "react-google-charts";
 import { maskNumericValue } from "src/App/utils/formatterHelper";
 
@@ -19,7 +17,6 @@ class DashboardFarmaciaView extends Component {
   };
 
   componentDidMount() {
-    // enableRipple(true);
     dashboardService
       .getLast12Meses()
       .then((data) => {
@@ -29,25 +26,32 @@ class DashboardFarmaciaView extends Component {
         if (error && error.data) {
           messageService.errorMessage(error.data.error, error.data.message);
         }
-        // this.setState({ ncms: [], filterNcms: [] });
+        this.criarChartData(null);
       });
   }
 
   criarChartData = (data) => {
     const chartData = [['Mês', 'Valor', 'Economia', 'Valor mercado', 'Acionistas', 'Outros clientes']]
-    data.forEach(obj => {
-      chartData.push([obj["dataFormatada"], obj["totalVenda"], obj["totalDesconto"], obj["totalMercado"], obj["totalClienteAcionista"], obj["totalClienteOutros"]])
-    });
-    this.setState({
-      dataLoadingStatus: 'ready',
-      chartData: chartData,
-      mesSelecionado: chartData[chartData.length - 1]
-    });
+    if(data.length > 0){
+      console.log('teste', data)
+      data.forEach(obj => {
+        chartData.push([obj["dataFormatada"], obj["totalVenda"], obj["totalDesconto"], obj["totalMercado"], obj["totalClienteAcionista"], obj["totalClienteOutros"]])
+      });
+      this.setState({
+        chartData: chartData,
+        mesSelecionado: chartData[chartData.length - 1]
+      });
+    }else{
+      chartData.push(['11/2020',0,0,0,0,0])
+      this.setState({
+        chartData: chartData,
+        mesSelecionado: undefined
+      });
+    }
   }
 
   render() {
     const { expandedFiltro, chartData, mesSelecionado } = this.state;
-    console.log(mesSelecionado)
     const handleChangeExpandedFiltro = () => (event, isExpanded) => {
       this.setState({ expandedFiltro: isExpanded })
     };
@@ -76,7 +80,7 @@ class DashboardFarmaciaView extends Component {
                 </Grid>
               </Grid>
               <Grid container style={{ paddingBottom: "10px" }} spacing={1}>
-                <Grid item xs={9}>
+                <Grid item xs={12} sm={12} md={8} lg={9}>
                   <Card className='pb-0 m-1' style={{ height: 305 }}>
                     <Card.Header className={this.props.classes.cardHeader}>
                       <Card.Title as='h5'>Faturamento</Card.Title>
@@ -129,7 +133,7 @@ class DashboardFarmaciaView extends Component {
                     </Card.Body>
                   </Card>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={12} md={4} lg={3}>
                   <Grid item xs={12}>
                     <Card className='pb-0 mb-1' style={{ height: 100 }}>
                       <Card.Header className={this.props.classes.cardHeader}>
@@ -167,7 +171,7 @@ class DashboardFarmaciaView extends Component {
               </Grid>
               {mesSelecionado && (
                 <Grid container style={{ paddingBottom: "10px" }} spacing={1}>
-                  <Grid item xs={6}>
+                  <Grid item xs={12} sm={12} md={6} lg={6}>
                     <Card className='pb-0 m-1' style={{ height: 335 }}>
                       <Card.Header className={this.props.classes.cardHeader}>
                         <Card.Title as='h5'>Clientes</Card.Title>

@@ -73,7 +73,7 @@ class ContaInvestimentoForm extends FormikComponent {
     const handleChangeValorAdesao = (name, event) => {
       let valor = numberToCurrency(event.target.value);
       setFieldValue(name, valor, true);
-      if(isNaN(valor) || valor == 0)
+      if(isNaN(valor) || valor === 0)
           setFieldValue("parcelaAdesao", undefined, false); 
       
       this.calcularAdesao(parcelaAdesao, valor);
@@ -286,7 +286,7 @@ class ContaInvestimentoForm extends FormikComponent {
                     helperText={touched.parcelaAdesao ? errors.parcelaAdesao : ""}
                     error={touched.parcelaAdesao && Boolean(errors.parcelaAdesao)}
                     value={parcelaAdesao || ""}
-                    disabled={valorAdesao == 0 || id != null}
+                    disabled={valorAdesao === 0 || id != null}
                     onBlur={this.blur.bind(null, "parcelaAdesao")}
                     onChange={(e) => handleChangeQtdParcelaAdesao("parcelaAdesao", e)}
                     label="Qtd. Parc. Adesão"

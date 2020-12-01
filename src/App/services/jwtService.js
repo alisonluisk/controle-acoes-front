@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-// const API_CONFIG = "http://54.174.116.204/v1";
-const BASE_URL = "http://localhost:8080";
+// const BASE_URL = "http://54.174.116.204";
+const BASE_URL = "http://api.pharmasa.com.br";
+// const BASE_URL = "http://localhost:8080";
 const API_CONFIG = `${BASE_URL}/v1`;
 const PATH_TOKEN = "/oauth/token";
 

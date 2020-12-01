@@ -15,16 +15,6 @@ class DadosVendaService extends BaseResourceService {
         return this.getAll(this.endpoint + '/find_by_params', params);
     }
 
-    // getAllEmpresa = async (codigoEmpresa) =>{
-    //     let params = [];
-    //     params.push({chave: 'codigoEmpresa', valor: codigoEmpresa});
-    //     return this.getAll(this.endpoint + '/find_all_empresa', params);
-    // }
-
-    // salvar(conta){
-    //     return this.salvarModelo(this.endpoint, conta);
-    // }
-
 }
 
 const sevice = new DadosVendaService();

@@ -1,6 +1,6 @@
 import React from "react";
 import CustomTablePaginated from "src/App/components/Tables/Paginated/CustomTablePaginated.js";
-import { maskCpfCnpj, maskContaIBolsa, maskTelefone } from "src/App/utils/formatterHelper";
+import { maskCpfCnpj, maskTelefone } from "src/App/utils/formatterHelper";
 
 const AcionistaList = (props) => {
   
